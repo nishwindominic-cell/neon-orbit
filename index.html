@@ -740,17 +740,21 @@
             align-self: center;
         }
 
-        /* ==================== ENHANCED MOBILE CONTROLS WITH HOLD-TO-SHOOT ==================== */
+        /* ==================== MOBILE CONTROLS - SINGLE PLAYER ==================== */
         .mobile-controls {
             position: fixed;
             bottom: 20px;
             left: 0;
             right: 0;
             z-index: 25;
-            display: flex;
+            display: none;
             justify-content: space-between;
             padding: 0 15px;
             pointer-events: none;
+        }
+
+        .mobile-controls.visible {
+            display: flex;
         }
 
         .joystick-container {
@@ -813,6 +817,9 @@
             transition: all 0.1s;
             font-family: monospace;
             letter-spacing: 1px;
+            touch-action: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         .mobile-action-btn:active {
@@ -837,6 +844,11 @@
             color: #aaa;
             pointer-events: none;
             z-index: 25;
+            display: none;
+        }
+
+        .mobile-instruction.visible {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -885,18 +897,22 @@
             }
         }
 
-        /* ==================== ENHANCED CO-OP MOBILE CONTROLS WITH HOLD-TO-SHOOT ==================== */
+        /* ==================== CO-OP MOBILE CONTROLS ==================== */
         .mobile-controls-coop {
             position: fixed;
             left: 0;
             right: 0;
             z-index: 25;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: space-between;
             padding: 15px;
             pointer-events: none;
             height: 100vh;
+        }
+
+        .mobile-controls-coop.visible {
+            display: flex;
         }
 
         .coop-player-top {
@@ -919,7 +935,6 @@
             padding-bottom: 15px;
         }
 
-        /* Player 1 controls (bottom) - Joystick on LEFT, Buttons on RIGHT */
         .coop-player-bottom .coop-controls-left {
             display: flex;
             gap: 10px;
@@ -932,7 +947,6 @@
             align-items: center;
         }
 
-        /* Player 2 controls (top) - BUTTONS on LEFT, JOYSTICK on RIGHT (swapped) */
         .coop-player-top .coop-controls-left {
             display: flex;
             gap: 10px;
@@ -1012,6 +1026,9 @@
             cursor: pointer;
             transition: all 0.1s;
             font-family: monospace;
+            touch-action: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         .coop-action-btn:active {
@@ -1056,37 +1073,6 @@
 
         .coop-action-btn.p2-blast:active {
             background: rgba(255, 170, 0, 0.3);
-        }
-
-        /* ADDED: Hold-to-shoot indicator style */
-        .shoot-active {
-            animation: shootPulse 0.3s infinite alternate;
-        }
-
-        @keyframes shootPulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-            }
-            100% {
-                transform: scale(1.05);
-                box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
-            }
-        }
-
-        .p2-shoot-active {
-            animation: shootPulseP2 0.3s infinite alternate;
-        }
-
-        @keyframes shootPulseP2 {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-            }
-            100% {
-                transform: scale(1.05);
-                box-shadow: 0 0 25px rgba(255, 0, 255, 0.8);
-            }
         }
 
         .coop-controls-group {
@@ -1135,14 +1121,18 @@
             }
         }
 
-        /* ==================== CO-OP MOBILE HUD - MODIFIED: Player 2 health bar below buttons ==================== */
-        /* Player 1 Health Card - positioned at bottom left, above player 1 joystick */
+        /* ==================== CO-OP MOBILE HUD ==================== */
         .coop-hud-bottom {
             position: fixed;
             bottom: 140px;
             left: 15px;
             z-index: 30;
             pointer-events: none;
+            display: none;
+        }
+
+        .coop-hud-bottom.visible {
+            display: block;
         }
 
         .coop-hud-bottom .coop-player-card {
@@ -1156,13 +1146,17 @@
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
         }
 
-        /* Player 2 Health Card - MODIFIED: positioned BELOW player 2 buttons (bottom of screen) */
         .coop-hud-top {
             position: fixed;
             bottom: 140px;
             right: 15px;
             z-index: 30;
             pointer-events: none;
+            display: none;
+        }
+
+        .coop-hud-top.visible {
+            display: block;
         }
 
         .coop-hud-top .coop-player-card {
@@ -3339,7 +3333,7 @@
             white-space: nowrap;
             font-family: monospace;
             animation: warningPulse 0.5s ease-out;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes warningPulse {
@@ -3397,15 +3391,34 @@
         }
 
         @keyframes screenShake {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5px, -5px); }
-            20% { transform: translate(5px, -5px); }
-            30% { transform: translate(-5px, 5px); }
-            40% { transform: translate(5px, 5px); }
-            50% { transform: translate(-3px, -3px); }
-            60% { transform: translate(3px, -3px); }
-            70% { transform: translate(-3px, 3px); }
-            80% { transform: translate(3px, 3px); }
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            10% {
+                transform: translate(-5px, -5px);
+            }
+            20% {
+                transform: translate(5px, -5px);
+            }
+            30% {
+                transform: translate(-5px, 5px);
+            }
+            40% {
+                transform: translate(5px, 5px);
+            }
+            50% {
+                transform: translate(-3px, -3px);
+            }
+            60% {
+                transform: translate(3px, -3px);
+            }
+            70% {
+                transform: translate(-3px, 3px);
+            }
+            80% {
+                transform: translate(3px, 3px);
+            }
         }
 
         .blast-particles {
@@ -3435,6 +3448,19 @@
                 opacity: 0;
                 transform: translate(var(--tx, 100px), var(--ty, -100px)) scale(0);
             }
+        }
+        /* ADDED: Hide music button during gameplay */
+        body.game-screen-active .music-control-btn {
+            display: none !important;
+        }
+        
+        /* ADDED: Control visibility classes */
+        .controls-visible {
+            display: flex !important;
+        }
+        
+        .controls-hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -3502,8 +3528,8 @@
                 <div id="coreHealthFill"></div>
             </div>
         </div>
-        <!-- ==================== SINGLE PLAYER MOBILE CONTROLS WITH HOLD-TO-SHOOT ==================== -->
-        <div class="mobile-controls" id="mobileControls" style="display: none;">
+        <!-- ==================== SINGLE PLAYER MOBILE CONTROLS ==================== -->
+        <div class="mobile-controls" id="mobileControls">
             <div class="joystick-container" id="joyP1Single">
                 <div class="joystick-base"></div>
                 <div class="joystick-thumb" id="joyP1SingleThumb"></div>
@@ -3513,9 +3539,9 @@
                 <div class="mobile-action-btn btn-blast" id="mobileBlastSingle">💥 BLAST</div>
             </div>
         </div>
-        <!-- ==================== ENHANCED CO-OP MOBILE CONTROLS WITH HOLD-TO-SHOOT ==================== -->
-        <div id="coopMobileControls" class="mobile-controls-coop" style="display: none;">
-            <!-- Player 2 (TOP) - BUTTONS on LEFT, JOYSTICK on RIGHT (swapped) -->
+        <!-- ==================== CO-OP MOBILE CONTROLS ==================== -->
+        <div id="coopMobileControls" class="mobile-controls-coop">
+            <!-- Player 2 (TOP) - BUTTONS on LEFT, JOYSTICK on RIGHT -->
             <div class="coop-player-top">
                 <div class="coop-controls-group">
                     <div class="coop-action-buttons">
@@ -3529,7 +3555,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Player 1 (BOTTOM) - JOYSTICK on LEFT, BUTTONS on RIGHT (normal) -->
+            <!-- Player 1 (BOTTOM) - JOYSTICK on LEFT, BUTTONS on RIGHT -->
             <div class="coop-player-bottom">
                 <div class="coop-controls-group">
                     <div class="coop-joystick p1-joy" id="coopJoyP1">
@@ -3544,10 +3570,10 @@
                 </div>
             </div>
         </div>
-        <!-- CO-OP Mobile HUD - Player 1 health bottom left, Player 2 health bottom right (below buttons) -->
-        <div id="coopMobileHUD" style="display: none;">
-            <!-- Player 2 Health - Bottom Right (BELOW player 2 buttons) -->
-            <div class="coop-hud-top">
+        <!-- CO-OP Mobile HUD -->
+        <div id="coopMobileHUD">
+            <!-- Player 2 Health - Bottom Right -->
+            <div class="coop-hud-top" id="coopHudTop">
                 <div class="coop-player-card p2-card">
                     <div>PLAYER 2</div>
                     <div class="coop-player-health">
@@ -3556,8 +3582,8 @@
                     <div class="coop-player-score p2-score-text" id="coopP2Score">0</div>
                 </div>
             </div>
-            <!-- Player 1 Health - Bottom Left (above player 1 joystick) -->
-            <div class="coop-hud-bottom">
+            <!-- Player 1 Health - Bottom Left -->
+            <div class="coop-hud-bottom" id="coopHudBottom">
                 <div class="coop-player-card p1-card">
                     <div>PLAYER 1</div>
                     <div class="coop-player-health">
@@ -3754,6 +3780,14 @@
                 <div class="setting-item">
                     <span class="setting-label">👆 Vibration</span>
                     <div class="toggle-switch" id="vibrationToggle"></div>
+                </div>
+                <!-- ADDED: Control Mode Setting -->
+                <div class="setting-item">
+                    <span class="setting-label">🎮 Control Mode</span>
+                    <div class="control-mode-group">
+                        <button class="control-mode-btn active" id="controlModeTouch">👆 Touch</button>
+                        <button class="control-mode-btn" id="controlModeButton">🎯 Button</button>
+                    </div>
                 </div>
                 <!-- ADDED: Reset Game Button -->
                 <div class="setting-item" style="border-bottom: none;">
@@ -4127,7 +4161,6 @@
         let pendingDoubleRewardCallback = null;
         let currentGameScoreForReward = 0;
 
-        // Ad functions for Android bridge
         function showInterstitialAd() {
             if (window.Android && Android.showInterstitialAd) {
                 console.log("Showing interstitial ad");
@@ -4177,7 +4210,6 @@
             }
         }
 
-        // Callback functions called from Android
         window.onInterstitialClosed = function () {
             console.log("Interstitial ad closed");
             if (pendingReviveCallback) {
@@ -4202,7 +4234,6 @@
             console.log("Reward ad completed");
         };
 
-        // Ad trigger counters
         let waveCounterForAd = 0;
         const WAVES_BETWEEN_ADS = 5;
 
@@ -4212,7 +4243,6 @@
             }
         }
 
-        // Game restart with ad check
         function restartGameWithAd() {
             showInterstitialAd();
             setTimeout(() => {
@@ -4220,11 +4250,9 @@
             }, 500);
         }
 
-        // Revive function using rewarded ad
         function showReviveAd() {
             showRewardAd(function (success) {
                 if (success) {
-                    // Revive the player
                     if (isFriendsMode) {
                         if (p1.health <= 0 && p2.health <= 0) {
                             p1.health = 50;
@@ -4251,7 +4279,6 @@
             }, 'revive');
         }
 
-        // Double rewards using rewarded ad
         function showDoubleRewardAd(score) {
             currentGameScoreForReward = score;
             showRewardAd(function (success) {
@@ -4278,12 +4305,168 @@
             playSound('powerup', 0.15);
         });
 
-        // Show app open ad on load
         setTimeout(() => {
             showAppOpenAd();
         }, 1000);
 
-        // ==================== REFRESH TIMER SYSTEM (NO GAME AFFECT) ====================
+        // ==================== CONTROL MODE SETTINGS ====================
+        let controlMode = 'touch';
+
+        function loadControlMode() {
+            const saved = localStorage.getItem('controlMode');
+            if (saved) {
+                controlMode = saved;
+                updateControlModeUI();
+            }
+        }
+
+        function saveControlMode() {
+            localStorage.setItem('controlMode', controlMode);
+            updateControlModeUI();
+        }
+
+        function updateControlModeUI() {
+            const touchBtn = document.getElementById('controlModeTouch');
+            const buttonBtn = document.getElementById('controlModeButton');
+            if (touchBtn) {
+                touchBtn.classList.toggle('active', controlMode === 'touch');
+            }
+            if (buttonBtn) {
+                buttonBtn.classList.toggle('active', controlMode === 'button');
+            }
+            applyControlMode();
+        }
+
+        function applyControlMode() {
+            const isMobile = window.innerWidth <= 768;
+            const mobileControls = document.getElementById('mobileControls');
+            const coopControls = document.getElementById('coopMobileControls');
+            const mobileHUD = document.getElementById('coopMobileHUD');
+            const mobileInst = document.getElementById('mobileInst');
+            const coopHudTop = document.getElementById('coopHudTop');
+            const coopHudBottom = document.getElementById('coopHudBottom');
+
+            if (!isMobile) {
+                // Desktop - hide all mobile controls
+                if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+                if (coopControls) { coopControls.style.display = 'none'; coopControls.classList.remove('visible'); }
+                if (mobileHUD) { mobileHUD.style.display = 'none'; mobileHUD.classList.remove('visible'); }
+                if (mobileInst) { mobileInst.style.display = 'none'; mobileInst.classList.remove('visible'); }
+                if (coopHudTop) coopHudTop.style.display = 'none';
+                if (coopHudBottom) coopHudBottom.style.display = 'none';
+                return;
+            }
+
+            // On mobile, controls are shown/hidden based on control mode and gameplay state
+            // The actual visibility is managed by updateControlsVisibility()
+            // Just apply the mode class
+            if (controlMode === 'button') {
+                document.body.classList.remove('touch-control-mode');
+                document.body.classList.add('button-control-mode');
+            } else {
+                document.body.classList.remove('button-control-mode');
+                document.body.classList.add('touch-control-mode');
+            }
+            
+            // Update visibility based on game state
+            updateControlsVisibility();
+        }
+
+        // ==================== CONTROL VISIBILITY MANAGEMENT ====================
+        function updateControlsVisibility() {
+            const isMobile = window.innerWidth <= 768;
+            const isGameplay = gameRunning && !gamePaused;
+
+            const mobileControls = document.getElementById('mobileControls');
+            const coopControls = document.getElementById('coopMobileControls');
+            const mobileHUD = document.getElementById('coopMobileHUD');
+            const mobileInst = document.getElementById('mobileInst');
+            const coopHudTop = document.getElementById('coopHudTop');
+            const coopHudBottom = document.getElementById('coopHudBottom');
+
+            // Hide all controls if not on mobile or not in gameplay
+            if (!isMobile || !isGameplay) {
+                if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+                if (coopControls) { coopControls.style.display = 'none'; coopControls.classList.remove('visible'); }
+                if (mobileHUD) { mobileHUD.style.display = 'none'; mobileHUD.classList.remove('visible'); }
+                if (mobileInst) { mobileInst.style.display = 'none'; mobileInst.classList.remove('visible'); }
+                if (coopHudTop) coopHudTop.style.display = 'none';
+                if (coopHudBottom) coopHudBottom.style.display = 'none';
+                return;
+            }
+
+            // On mobile during gameplay
+            if (controlMode === 'button') {
+                // Button mode - show controls based on game mode
+                if (isFriendsMode) {
+                    // CO-OP mode - show CO-OP controls
+                    if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+                    if (coopControls) { coopControls.style.display = 'flex'; coopControls.classList.add('visible'); }
+                    if (mobileHUD) { mobileHUD.style.display = 'block'; mobileHUD.classList.add('visible'); }
+                    if (mobileInst) { mobileInst.style.display = 'block'; mobileInst.classList.add('visible'); }
+                    if (coopHudTop) coopHudTop.style.display = 'block';
+                    if (coopHudBottom) coopHudBottom.style.display = 'block';
+                } else {
+                    // Single player mode - show single player controls (joystick + buttons)
+                    if (mobileControls) { mobileControls.style.display = 'flex'; mobileControls.classList.add('visible'); }
+                    if (coopControls) { coopControls.style.display = 'none'; coopControls.classList.remove('visible'); }
+                    if (mobileHUD) { mobileHUD.style.display = 'none'; mobileHUD.classList.remove('visible'); }
+                    if (mobileInst) { mobileInst.style.display = 'block'; mobileInst.classList.add('visible'); }
+                    if (coopHudTop) coopHudTop.style.display = 'none';
+                    if (coopHudBottom) coopHudBottom.style.display = 'none';
+                }
+            } else {
+                // Touch mode - HIDE ALL controls on single player, but SHOW CO-OP controls in co-op mode
+                if (isFriendsMode) {
+                    // CO-OP mode - show CO-OP controls even in touch mode (button controls for co-op)
+                    if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+                    if (coopControls) { coopControls.style.display = 'flex'; coopControls.classList.add('visible'); }
+                    if (mobileHUD) { mobileHUD.style.display = 'block'; mobileHUD.classList.add('visible'); }
+                    if (mobileInst) { mobileInst.style.display = 'block'; mobileInst.classList.add('visible'); }
+                    if (coopHudTop) coopHudTop.style.display = 'block';
+                    if (coopHudBottom) coopHudBottom.style.display = 'block';
+                } else {
+                    // Single player mode - HIDE ALL controls
+                    if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+                    if (coopControls) { coopControls.style.display = 'none'; coopControls.classList.remove('visible'); }
+                    if (mobileHUD) { mobileHUD.style.display = 'none'; mobileHUD.classList.remove('visible'); }
+                    if (mobileInst) { mobileInst.style.display = 'none'; mobileInst.classList.remove('visible'); }
+                    if (coopHudTop) coopHudTop.style.display = 'none';
+                    if (coopHudBottom) coopHudBottom.style.display = 'none';
+                }
+            }
+        }
+
+        function hideAllControls() {
+            const mobileControls = document.getElementById('mobileControls');
+            const coopControls = document.getElementById('coopMobileControls');
+            const mobileHUD = document.getElementById('coopMobileHUD');
+            const mobileInst = document.getElementById('mobileInst');
+            const coopHudTop = document.getElementById('coopHudTop');
+            const coopHudBottom = document.getElementById('coopHudBottom');
+
+            if (mobileControls) { mobileControls.style.display = 'none'; mobileControls.classList.remove('visible'); }
+            if (coopControls) { coopControls.style.display = 'none'; coopControls.classList.remove('visible'); }
+            if (mobileHUD) { mobileHUD.style.display = 'none'; mobileHUD.classList.remove('visible'); }
+            if (mobileInst) { mobileInst.style.display = 'none'; mobileInst.classList.remove('visible'); }
+            if (coopHudTop) coopHudTop.style.display = 'none';
+            if (coopHudBottom) coopHudBottom.style.display = 'none';
+        }
+
+        // Control mode event listeners
+        document.getElementById('controlModeTouch').addEventListener('click', function () {
+            controlMode = 'touch';
+            saveControlMode();
+            playSound('powerup', 0.2);
+        });
+
+        document.getElementById('controlModeButton').addEventListener('click', function () {
+            controlMode = 'button';
+            saveControlMode();
+            playSound('powerup', 0.2);
+        });
+
+        // ==================== REFRESH TIMER SYSTEM ====================
         let gameStartTimestamp = Date.now();
         let refreshSeconds = 0;
         let refreshTimerInterval = null;
@@ -4315,20 +4498,14 @@
             startRefreshTimer();
         }
 
-        function syncRefreshTimerOnResume() {
-            if (refreshTimerInterval) {
-                clearInterval(refreshTimerInterval);
-                startRefreshTimer();
-            }
-        }
-
-        // ==================== ENHANCED BEAUTIFUL NORMAL BGM SYSTEM ====================
+        // ==================== BGM SYSTEM ====================
         let bgmAudioContext = null;
         let bgmGainNode = null;
         let bgmEnabled = true;
         let bgmIsPlaying = false;
         let bgmAnimationId = null;
         let bgmVolumeValue = 0.6;
+
         function initBGM() {
             if (bgmAudioContext) return;
             try {
@@ -4340,6 +4517,7 @@
                 console.log("Web Audio not supported:", e);
             }
         }
+
         function startBGM() {
             if (!bgmAudioContext) initBGM();
             if (!bgmAudioContext || bgmIsPlaying) return;
@@ -4351,6 +4529,7 @@
                 playBGMLoop();
             }
         }
+
         function stopBGM() {
             if (!bgmIsPlaying) return;
             bgmIsPlaying = false;
@@ -4362,12 +4541,14 @@
                 bgmGainNode.gain.linearRampToValueAtTime(0, bgmAudioContext.currentTime + 0.8);
             }
         }
+
         function setBGMVolume(volumePercent) {
             bgmVolumeValue = Math.max(0.1, Math.min(1, volumePercent / 100));
             if (bgmGainNode && bgmIsPlaying) {
                 bgmGainNode.gain.value = bgmVolumeValue * 0.65;
             }
         }
+
         function toggleBGM() {
             bgmEnabled = !bgmEnabled;
             const musicBtn = document.getElementById('musicControlBtn');
@@ -4392,6 +4573,7 @@
                 stopBGM();
             }
         }
+
         function playBGMLoop() {
             if (!bgmAudioContext || !bgmEnabled || bgmIsPlaying) return;
             bgmIsPlaying = true;
@@ -4432,15 +4614,22 @@
                         const padOsc2 = ctx.createOscillator();
                         const padOsc3 = ctx.createOscillator();
                         const padGain = ctx.createGain();
-                        padOsc1.type = 'triangle'; padOsc1.frequency.value = chord.root;
-                        padOsc2.type = 'triangle'; padOsc2.frequency.value = chord.third;
-                        padOsc3.type = 'triangle'; padOsc3.frequency.value = chord.fifth;
+                        padOsc1.type = 'triangle';
+                        padOsc1.frequency.value = chord.root;
+                        padOsc2.type = 'triangle';
+                        padOsc2.frequency.value = chord.third;
+                        padOsc3.type = 'triangle';
+                        padOsc3.frequency.value = chord.fifth;
                         padGain.gain.setValueAtTime(0, scheduledTime);
                         padGain.gain.linearRampToValueAtTime(0.08, scheduledTime + 0.5);
                         padGain.gain.linearRampToValueAtTime(0, scheduledTime + 4 * beatDuration);
-                        padOsc1.connect(padGain); padOsc2.connect(padGain); padOsc3.connect(padGain);
+                        padOsc1.connect(padGain);
+                        padOsc2.connect(padGain);
+                        padOsc3.connect(padGain);
                         padGain.connect(bgmGainNode);
-                        padOsc1.start(scheduledTime); padOsc2.start(scheduledTime); padOsc3.start(scheduledTime);
+                        padOsc1.start(scheduledTime);
+                        padOsc2.start(scheduledTime);
+                        padOsc3.start(scheduledTime);
                         padOsc1.stop(scheduledTime + 4 * beatDuration);
                         padOsc2.stop(scheduledTime + 4 * beatDuration);
                         padOsc3.stop(scheduledTime + 4 * beatDuration);
@@ -4463,17 +4652,18 @@
             };
             scheduleNext();
         }
-        // ==================== RESET GAME FUNCTION (FULL RESET - POINTS TO ZERO) ====================
+
+        // ==================== RESET GAME FUNCTION ====================
         function showResetConfirm() {
             document.getElementById('resetConfirmOverlay').classList.add('active');
         }
+
         function hideResetConfirm() {
             document.getElementById('resetConfirmOverlay').classList.remove('active');
         }
+
         function resetAllGameData() {
-            // Clear all localStorage data
             localStorage.clear();
-            // Reset ALL global variables to initial state
             userPoints = 0;
             ownedItems = [];
             equippedSkin = 'default';
@@ -4499,9 +4689,7 @@
                 volume: 60,
                 vibrationEnabled: true
             };
-            // Reset high scores
             highScores = { infinity: 0, hard: 0, survival: 0, friends: 0, timer: 0 };
-            // Reset game state variables
             score = 0;
             wave = 1;
             health = 100;
@@ -4512,18 +4700,14 @@
             levelCompletedFlag = false;
             gameRunning = false;
             gamePaused = false;
-            // Reset session storage
             sessionStorage.clear();
-            // Save fresh data with ZERO points
             saveGameData();
             saveProfile();
             saveLevelProgress();
             saveSettings();
-            // Update all UI displays
             updatePointsDisplay();
             updateProfileUI();
             updateLevelSelectUI();
-            // Reset points display to 0
             const pointsSpan = document.getElementById('pointsValue');
             const storePoints = document.getElementById('storePoints');
             if (pointsSpan) pointsSpan.textContent = '0';
@@ -4531,14 +4715,13 @@
             showToast("✅ Game data has been reset! Points are now 0. Starting fresh!", false);
             playSound('powerup', 0.3);
             hideResetConfirm();
-            // Reset refresh timer
             resetRefreshTimer();
-            // Return to login screen after reset to ensure clean state
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
         }
-        // ==================== LEVEL MODE SYSTEM (WITH INFINITE WAVES & SCORE TARGET) ====================
+
+        // ==================== LEVEL MODE SYSTEM ====================
         const TOTAL_LEVELS = 2100;
         const LEVELS_PER_PAGE = 25;
         let currentPage = 1;
@@ -4547,13 +4730,13 @@
         let levelCompletedFlag = false;
         let levelTargetScore = 0;
         let levelRewardPoints = 0;
-        let levelCompletePopup = null;
         let levelProgress = {
             currentLevel: 1,
             completedLevels: [],
             levelStars: {},
             levelHighScores: {}
         };
+
         function loadLevelProgress() {
             const key = 'levelProgress_' + currentPlayerName;
             const saved = localStorage.getItem(key);
@@ -4568,10 +4751,12 @@
             if (!levelProgress.levelHighScores) levelProgress.levelHighScores = {};
             saveLevelProgress();
         }
+
         function saveLevelProgress() {
             const key = 'levelProgress_' + currentPlayerName;
             localStorage.setItem(key, JSON.stringify(levelProgress));
         }
+
         function getLevelConfig(levelNum) {
             const enemySpeedBonus = Math.min(2.2, 1 + (levelNum - 1) * 0.0006);
             const spawnBonus = Math.max(35, 60 - Math.floor(levelNum / 45));
@@ -4590,22 +4775,31 @@
                 difficulty: difficultyLabel
             };
         }
+
         function getDifficultyClass(difficulty) {
             switch (difficulty) {
-                case 'easy': return 'diff-easy';
-                case 'medium': return 'diff-medium';
-                case 'hard': return 'diff-hard';
-                case 'extreme': return 'diff-extreme';
-                default: return 'diff-easy';
+                case 'easy':
+                    return 'diff-easy';
+                case 'medium':
+                    return 'diff-medium';
+                case 'hard':
+                    return 'diff-hard';
+                case 'extreme':
+                    return 'diff-extreme';
+                default:
+                    return 'diff-easy';
             }
         }
+
         function isLevelCompleted(levelNum) {
             return levelProgress.completedLevels.includes(levelNum);
         }
+
         function isLevelUnlocked(levelNum) {
             if (levelNum === 1) return true;
             return levelProgress.completedLevels.includes(levelNum - 1);
         }
+
         function completeLevel(levelNum, finalScore) {
             if (!isLevelCompleted(levelNum)) {
                 levelProgress.completedLevels.push(levelNum);
@@ -4613,8 +4807,7 @@
                     levelProgress.levelHighScores[levelNum] = finalScore;
                 }
                 const levelConfig = getLevelConfig(levelNum);
-                // NO POINTS REWARD IN LEVEL MODE - Only XP
-                userPoints = userPoints; // No points added
+                userPoints = userPoints;
                 addXP(levelConfig.expReward);
                 saveGameData();
                 updatePointsDisplay();
@@ -4632,6 +4825,7 @@
             }
             return false;
         }
+
         function updateLevelSelectUI() {
             const completedCount = levelProgress.completedLevels.length;
             const unlockedCount = levelProgress.completedLevels.length + 1;
@@ -4643,6 +4837,7 @@
             if (unlockedSpan) unlockedSpan.textContent = Math.min(unlockedCount, TOTAL_LEVELS);
             renderLevelGrid();
         }
+
         function renderLevelGrid() {
             const startIdx = (currentPage - 1) * LEVELS_PER_PAGE + 1;
             const endIdx = Math.min(startIdx + LEVELS_PER_PAGE - 1, TOTAL_LEVELS);
@@ -4686,6 +4881,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 else nextBtn.classList.remove('disabled');
             }
         }
+
         function goToPage(page) {
             const totalPages = Math.ceil(TOTAL_LEVELS / LEVELS_PER_PAGE);
             if (page < 1) page = 1;
@@ -4693,6 +4889,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             currentPage = page;
             renderLevelGrid();
         }
+
         function jumpToLevel() {
             const input = document.getElementById('levelSearchInput');
             if (!input) return;
@@ -4706,12 +4903,14 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             input.value = '';
             showToast(`Jumped to Level ${levelNum}`, false);
         }
+
         function showLevelSelectScreen() {
             updateLevelSelectUI();
             showScreen('levelSelectScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
         }
+
         function startLevelMode(levelNum) {
             if (!isLevelUnlocked(levelNum)) {
                 showToast(`🔒 Level ${levelNum} is locked! Complete Level ${levelNum - 1} first!`, true);
@@ -4721,18 +4920,16 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             levelModeActive = true;
             levelCompletedFlag = false;
             currentMode = 'level';
-            // Get level configuration
             const levelConfig = getLevelConfig(currentLevelNum);
             levelTargetScore = levelConfig.requiredScore;
             levelRewardPoints = levelConfig.rewardPoints;
-            // Store the level number for the game
             sessionStorage.setItem('currentLevelNum', levelNum);
             sessionStorage.setItem('levelModeActive', 'true');
             sessionStorage.setItem('levelTargetScore', levelTargetScore);
             sessionStorage.setItem('levelRewardPoints', levelRewardPoints);
             showStartScreen('level');
         }
-        // ==================== LEVEL COMPLETE POPUP FUNCTIONS ====================
+
         function showLevelCompletePopup(score) {
             levelCompletedFlag = true;
             gamePaused = true;
@@ -4744,10 +4941,12 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (popup) popup.classList.add('active');
             playSound('levelup', 0.5);
         }
+
         function hideLevelCompletePopup() {
             const popup = document.getElementById('levelCompletePopup');
             if (popup) popup.classList.remove('active');
         }
+
         function goToNextLevel() {
             hideLevelCompletePopup();
             gamePaused = false;
@@ -4766,24 +4965,29 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 showLevelSelectScreen();
             }
         }
+
         function restartCurrentLevel() {
             hideLevelCompletePopup();
             gamePaused = false;
             gameRunning = false;
             startLevelMode(currentLevelNum);
         }
+
         function goToHomeFromLevel() {
             hideLevelCompletePopup();
             gamePaused = false;
             gameRunning = false;
             showHome();
         }
+
         // ==================== PLAYER LOGIN SYSTEM ====================
         let currentPlayerName = "GUEST";
         let isLoggedIn = false;
+
         function savePlayerNameToStorage(name) {
             localStorage.setItem('playerName', name);
         }
+
         function loadPlayerNameFromStorage() {
             const saved = localStorage.getItem('playerName');
             if (saved && saved.trim().length > 0) {
@@ -4793,6 +4997,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             return false;
         }
+
         function loginPlayer(name) {
             currentPlayerName = name.toUpperCase();
             isLoggedIn = true;
@@ -4806,10 +5011,10 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             loadPlayerData();
             loadProfile();
             loadLevelProgress();
-            // Start refresh timer
             resetRefreshTimer();
             if (bgmEnabled) startBGM();
         }
+
         function loginAsGuest() {
             currentPlayerName = "GUEST";
             isLoggedIn = true;
@@ -4822,10 +5027,10 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             loadPlayerData();
             loadProfile();
             loadLevelProgress();
-            // Start refresh timer
             resetRefreshTimer();
             if (bgmEnabled) startBGM();
         }
+
         if (loadPlayerNameFromStorage()) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('profileHomeBtn').style.display = 'flex';
@@ -4833,6 +5038,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             document.getElementById('loginScreen').style.display = 'flex';
             document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
         }
+
         document.getElementById('loginConfirmBtn').addEventListener('click', () => {
             const nameInput = document.getElementById('playerNameInput');
             const name = nameInput.value.trim();
@@ -4846,20 +5052,25 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }, 2000);
             }
         });
+
         document.getElementById('guestLoginBtn').addEventListener('click', () => {
             loginAsGuest();
         });
+
         document.getElementById('playerNameInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 document.getElementById('loginConfirmBtn').click();
             }
         });
+
         const musicControlBtn = document.getElementById('musicControlBtn');
         if (musicControlBtn) {
             musicControlBtn.addEventListener('click', toggleBGM);
         }
+
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let audioEnabled = false;
+
         function playSound(type, volume = 0.3) {
             if (!settings.soundEnabled) return;
             if (!audioEnabled) return;
@@ -4873,17 +5084,38 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             gain.gain.setValueAtTime(volume, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
             switch (type) {
-                case 'shoot': osc.frequency.value = 880; osc.type = 'sine'; break;
-                case 'explosion': osc.frequency.value = 150; osc.type = 'sawtooth'; break;
-                case 'hit': osc.frequency.value = 440; osc.type = 'square'; break;
-                case 'powerup': osc.frequency.value = 660; osc.type = 'sine'; break;
-                case 'blast': osc.frequency.value = 220; osc.type = 'triangle'; break;
-                case 'levelup': osc.frequency.value = 880; osc.type = 'sine'; break;
-                default: osc.frequency.value = 523.25; osc.type = 'sine';
+                case 'shoot':
+                    osc.frequency.value = 880;
+                    osc.type = 'sine';
+                    break;
+                case 'explosion':
+                    osc.frequency.value = 150;
+                    osc.type = 'sawtooth';
+                    break;
+                case 'hit':
+                    osc.frequency.value = 440;
+                    osc.type = 'square';
+                    break;
+                case 'powerup':
+                    osc.frequency.value = 660;
+                    osc.type = 'sine';
+                    break;
+                case 'blast':
+                    osc.frequency.value = 220;
+                    osc.type = 'triangle';
+                    break;
+                case 'levelup':
+                    osc.frequency.value = 880;
+                    osc.type = 'sine';
+                    break;
+                default:
+                    osc.frequency.value = 523.25;
+                    osc.type = 'sine';
             }
             osc.start();
             osc.stop(audioCtx.currentTime + 0.3);
         }
+
         function enableAudio() {
             if (!audioEnabled) {
                 audioEnabled = true;
@@ -4895,25 +5127,21 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             }
         }
+
         document.body.addEventListener('click', enableAudio);
         document.body.addEventListener('touchstart', enableAudio);
-        
-        // ==================== MODIFIED SHOWTOAST FUNCTION - 2 SECONDS DURATION ====================
-        // Original showToast function exists, we are adding a new version that overrides it
-        // This makes the message box disappear after 2 seconds instead of 2.5 seconds
-        const originalShowToast = window.showToast;
+
+        // ==================== SHOWTOAST FUNCTION ====================
         function showToast(message, isError = false) {
             const toast = document.getElementById('toastNotification');
             toast.textContent = message;
             toast.className = 'toast-notification' + (isError ? ' error' : '');
             toast.classList.add('show');
-            // CHANGED: 2 seconds instead of 2500ms (2.5 seconds)
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
-        // Override the original function
         window.showToast = showToast;
-        
-        // ==================== ADDED: CORE DAMAGE VISUAL EFFECTS FUNCTION ====================
+
+        // ==================== CORE DAMAGE VISUAL EFFECTS ====================
         function showCoreDamageWarning(damageAmount, isHighDamage) {
             const coreBox = document.getElementById('coreHealthBox');
             if (coreBox) {
@@ -4922,7 +5150,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     coreBox.classList.remove('core-damage-flash');
                 }, 300);
             }
-            
+
             if (isHighDamage) {
                 const warningDiv = document.createElement('div');
                 warningDiv.className = 'high-damage-warning';
@@ -4931,36 +5159,26 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 setTimeout(() => {
                     warningDiv.remove();
                 }, 600);
-                
-                // Vibrate on high damage if enabled
                 if (settings.vibrationEnabled && navigator.vibrate) {
                     navigator.vibrate(200);
                 }
             }
         }
-        
-        // ==================== ADDED: DAMAGE BOOST SPAWN CHANCE BASED ON WAVE ====================
-        // Damage boost enemies appear more frequently as wave number increases
+
         function getDamageBoostSpawnChance() {
-            // Base chance: 25% at wave 1, increasing to 55% at wave 50
             let chance = Math.min(0.55, 0.25 + (wave - 1) * 0.006);
             return chance;
         }
-        
-        // ==================== ADDED: 2 SECOND BLAST ANIMATION FOR CORE EXPLOSION ====================
+
         let blastAnimationActive = false;
         let blastAnimationTimer = null;
-        
+
         function triggerCoreBlastAnimation() {
             if (blastAnimationActive) return;
             blastAnimationActive = true;
-            
-            // Add blast overlay
             const blastOverlay = document.createElement('div');
             blastOverlay.className = 'core-blast-overlay';
             document.body.appendChild(blastOverlay);
-            
-            // Add screen shake to game container
             const gameContainer = document.getElementById('gameContainer');
             if (gameContainer) {
                 gameContainer.classList.add('screen-shake');
@@ -4968,15 +5186,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     gameContainer.classList.remove('screen-shake');
                 }, 500);
             }
-            
-            // Create flying particles
             const particlesContainer = document.createElement('div');
             particlesContainer.className = 'blast-particles';
             document.body.appendChild(particlesContainer);
-            
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            
             for (let i = 0; i < 100; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'blast-particle';
@@ -4993,20 +5207,16 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 particle.style.animationDelay = (Math.random() * 0.5) + 's';
                 particlesContainer.appendChild(particle);
             }
-            
-            // Play explosion sound
             playSound('explosion', 0.7);
-            
-            // Remove blast elements after 2 seconds
             blastAnimationTimer = setTimeout(() => {
                 if (blastOverlay) blastOverlay.remove();
                 if (particlesContainer) particlesContainer.remove();
                 blastAnimationActive = false;
             }, 2000);
         }
-        
-        // ==================== ADDED: CONSTANT HEALTH VALUES (NO HEALTH INCREASE WITH WAVES) ====================
-        // Enemy health remains constant across all waves - only enemy count and spawn rate increase
+
+        // ==================== CONSTANTS ====================
+        const CONSTANT_SCORE_VALUE = 2;
         const CONSTANT_ENEMY_HEALTH = {
             triangle: 1,
             square: 1,
@@ -5027,13 +5237,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             nightmare: 5,
             razor: 4
         };
-        
-        // ==================== ADDED: CONSTANT SCORE VALUES ====================
-        // Score remains constant at 2 points per enemy
-        const CONSTANT_SCORE_VALUE = 2;
-        
-        // ==================== ADDED: INCREASED CORE DAMAGE VALUES ====================
-        // When enemy hits the core, more health is reduced - increased damage values
+
         const INCREASED_CORE_DAMAGE = {
             triangle: 15,
             square: 20,
@@ -5055,21 +5259,16 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             razor: 45,
             damageBoost: 20
         };
-        
-        // ==================== ADDED: STORE POINTS EARNING - ONLY 2 POINTS PER ENEMY ====================
-        // Store points are increased by exactly 2 per enemy kill
-        
-        // ==================== ADDED: SPAWN RATE CONSTANTS ====================
-        // Damage boost enemies spawn based on wave progression
-        // High damage enemies spawn only 5% of the time
+
         const HIGH_DAMAGE_SPAWN_CHANCE = 0.05;
-        
+
         let settings = {
             soundEnabled: true,
             musicEnabled: true,
             volume: 60,
             vibrationEnabled: true
         };
+
         function loadSettings() {
             const saved = localStorage.getItem('gameSettings');
             if (saved) {
@@ -5080,7 +5279,9 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             bgmEnabled = settings.musicEnabled;
             updateSettingsUI();
+            loadControlMode();
         }
+
         function saveSettings() {
             localStorage.setItem('gameSettings', JSON.stringify(settings));
             setBGMVolume(settings.volume);
@@ -5098,6 +5299,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (bgmEnabled) startBGM();
             else stopBGM();
         }
+
         function updateSettingsUI() {
             const soundToggle = document.getElementById('soundToggle');
             const musicToggle = document.getElementById('musicToggle');
@@ -5118,6 +5320,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             }
         }
+
         function toggleSetting(setting) {
             settings[setting] = !settings[setting];
             saveSettings();
@@ -5130,15 +5333,19 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 else stopBGM();
             }
         }
+
         function setVolume(value) {
             settings.volume = parseInt(value);
             saveSettings();
             updateSettingsUI();
             setBGMVolume(settings.volume);
         }
+
         function openSettings() {
             document.getElementById('settingsPopup').classList.add('active');
         }
+
+        // ==================== PLAYER PROFILE ====================
         let playerProfile = {
             level: 1,
             xp: 0,
@@ -5157,6 +5364,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             { minLevel: 50, name: "MYTHIC", color: "#ff0044" },
             { minLevel: 75, name: "GODLIKE", color: "#ffff00" }
         ];
+
         function loadProfile() {
             const key = 'playerProfile_' + currentPlayerName;
             const saved = localStorage.getItem(key);
@@ -5168,10 +5376,12 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             updateProfileUI();
         }
+
         function saveProfile() {
             const key = 'playerProfile_' + currentPlayerName;
             localStorage.setItem(key, JSON.stringify(playerProfile));
         }
+
         function getRankName(level) {
             let rank = RANKS[0];
             for (let i = RANKS.length - 1; i >= 0; i--) {
@@ -5182,15 +5392,17 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             return rank.name;
         }
+
         function getXpForNextLevel() {
             return playerProfile.level * XP_PER_LEVEL;
         }
+
         function getXpProgressPercent() {
             const xpNeeded = getXpForNextLevel();
             return Math.min(100, (playerProfile.xp / xpNeeded) * 100);
         }
+
         function addXP(amount) {
-            let oldLevel = playerProfile.level;
             playerProfile.xp += amount;
             let leveledUp = false;
             let levelsGained = 0;
@@ -5212,6 +5424,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             saveProfile();
             updateProfileUI();
         }
+
         function showLevelUpNotification(newLevel, reward) {
             const notif = document.getElementById('levelupNotification');
             const levelSpan = document.getElementById('levelupLevel');
@@ -5223,6 +5436,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 notif.classList.remove('show');
             }, 2500);
         }
+
         function updateProfileUI() {
             const nameEl = document.getElementById('profilePlayerName');
             if (nameEl) nameEl.textContent = currentPlayerName;
@@ -5244,11 +5458,13 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             const rankEl = document.getElementById('profileRankName');
             if (rankEl) rankEl.textContent = getRankName(playerProfile.level);
         }
+
         function openProfile() {
             updateProfileUI();
             document.getElementById('profilePopup').classList.add('active');
             playSound('powerup', 0.15);
         }
+
         function awardGameProgress(score, wave, mode) {
             playerProfile.gamesPlayed++;
             playerProfile.totalScore += score;
@@ -5263,11 +5479,14 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             saveProfile();
             updateProfileUI();
         }
+
+        // ==================== STORE SYSTEM ====================
         let userPoints = parseInt(localStorage.getItem('neonPoints_' + (currentPlayerName || 'guest'))) || 0;
         let ownedItems = JSON.parse(localStorage.getItem('ownedItems_' + (currentPlayerName || 'guest'))) || [];
         let equippedSkin = localStorage.getItem('equippedSkin_' + (currentPlayerName || 'guest')) || 'default';
         let equippedPowerups = JSON.parse(localStorage.getItem('equippedPowerups_' + (currentPlayerName || 'guest'))) || [];
         let equippedBoosts = JSON.parse(localStorage.getItem('equippedBoosts_' + (currentPlayerName || 'guest'))) || [];
+
         const skinColors = {
             default: { p1: '#00ffff', p2: '#ff00ff' },
             skin_gold: { p1: '#ffaa00', p2: '#ffaa44' },
@@ -5276,8 +5495,10 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             skin_nebula: { p1: '#ff44ff', p2: '#44ffff' },
             skin_legend: { p1: '#ffffff', p2: '#ffff88' }
         };
+
         let activePowerupEffects = { extraLife: false, rapidFire: false, shieldBoost: false, scoreMult: false, bombPack: false };
         let activeBoostEffects = { headStart: false, coinMagnet: false, timeWarp: false, comboMaster: false };
+
         function loadActiveEffects() {
             for (let key in activePowerupEffects) activePowerupEffects[key] = false;
             for (let key in activeBoostEffects) activeBoostEffects[key] = false;
@@ -5295,33 +5516,38 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 if (boost === 'boost_combo') activeBoostEffects.comboMaster = true;
             });
         }
+
         const storeItems = {
             powerups: [
-                { id: 'extra_life', name: 'Extra Life', icon: '❤️', desc: 'Start with +1 core health', price: 500, type: 'powerup', effect: 'extraLife' },
-                { id: 'rapid_fire', name: 'Rapid Fire', icon: '🔥', desc: '2x faster shooting speed', price: 800, type: 'powerup', effect: 'rapidFire' },
-                { id: 'shield_boost', name: 'Shield Boost', icon: '🛡️', desc: 'Core takes 50% less damage', price: 1200, type: 'powerup', effect: 'shieldBoost' },
-                { id: 'score_multiplier', name: 'Score Multiplier', icon: '✨', desc: '2x points from enemies', price: 1000, type: 'powerup', effect: 'scoreMult' },
-                { id: 'bomb_pack', name: 'Bomb Pack', icon: '💣', desc: '3 instant orbital blasts', price: 1500, type: 'powerup', effect: 'bombPack' },
-                // NEW POWER-UPS WITH HIGHER PRICES
-                { id: 'laser_beam', name: 'Laser Beam', icon: '🔦', desc: 'Piercing laser that hits multiple enemies', price: 2500, type: 'powerup', effect: 'laserBeam' },
-                { id: 'freeze_blast', name: 'Freeze Blast', icon: '❄️', desc: 'Slows all enemies by 40%', price: 3000, type: 'powerup', effect: 'freezeBlast' },
-                { id: 'vampire_core', name: 'Vampire Core', icon: '🧛', desc: 'Killing enemies heals the core', price: 4000, type: 'powerup', effect: 'vampireCore' },
-                { id: 'nuclear_pulse', name: 'Nuclear Pulse', icon: '☢️', desc: 'Massive blast dealing 50 damage to all enemies', price: 5000, type: 'powerup', effect: 'nuclearPulse' }
+                { id: 'extra_life', name: 'Extra Life', icon: '❤️', desc: 'Start with +1 core health', price: 800, type: 'powerup', effect: 'extraLife' },
+                { id: 'rapid_fire', name: 'Rapid Fire', icon: '🔥', desc: '2x faster shooting speed', price: 1200, type: 'powerup', effect: 'rapidFire' },
+                { id: 'shield_boost', name: 'Shield Boost', icon: '🛡️', desc: 'Core takes 50% less damage', price: 1800, type: 'powerup', effect: 'shieldBoost' },
+                { id: 'score_multiplier', name: 'Score Multiplier', icon: '✨', desc: '2x points from enemies', price: 1500, type: 'powerup', effect: 'scoreMult' },
+                { id: 'bomb_pack', name: 'Bomb Pack', icon: '💣', desc: '3 instant orbital blasts', price: 2000, type: 'powerup', effect: 'bombPack' },
+                { id: 'laser_beam', name: 'Laser Beam', icon: '🔦', desc: 'Piercing laser that hits multiple enemies', price: 3000, type: 'powerup', effect: 'laserBeam' },
+                { id: 'freeze_blast', name: 'Freeze Blast', icon: '❄️', desc: 'Slows all enemies by 40%', price: 3500, type: 'powerup', effect: 'freezeBlast' },
+                { id: 'vampire_core', name: 'Vampire Core', icon: '🧛', desc: 'Killing enemies heals the core', price: 4500, type: 'powerup', effect: 'vampireCore' },
+                { id: 'nuclear_pulse', name: 'Nuclear Pulse', icon: '☢️', desc: 'Massive blast dealing 50 damage to all enemies', price: 5500, type: 'powerup', effect: 'nuclearPulse' },
+                { id: 'chain_lightning', name: 'Chain Lightning', icon: '⚡', desc: 'Shots chain to nearby enemies', price: 4000, type: 'powerup', effect: 'chainLightning' },
+                { id: 'phase_shift', name: 'Phase Shift', icon: '🌀', desc: 'Become invulnerable for 2 seconds on kill', price: 5000, type: 'powerup', effect: 'phaseShift' },
+                { id: 'overdrive', name: 'Overdrive', icon: '💫', desc: '50% faster fire rate and 25% more damage', price: 6000, type: 'powerup', effect: 'overdrive' },
+                { id: 'reflect_shield', name: 'Reflect Shield', icon: '🔄', desc: 'Reflects 30% of damage back to enemies', price: 7000, type: 'powerup', effect: 'reflectShield' }
             ],
             skins: [
-                { id: 'skin_gold', name: 'Gold Defender', icon: '🌟', desc: 'Golden ship skin', price: 50, type: 'skin', effect: 'gold' },
-                { id: 'skin_crimson', name: 'Crimson Fury', icon: '🔴', desc: 'Red plasma ship', price: 75, type: 'skin', effect: 'crimson' },
-                { id: 'skin_phantom', name: 'Phantom', icon: '👻', desc: 'Ghostly transparent ship', price: 100, type: 'skin', effect: 'phantom' },
-                { id: 'skin_nebula', name: 'Nebula', icon: '🌌', desc: 'Cosmic rainbow ship', price: 150, type: 'skin', effect: 'nebula' },
-                { id: 'skin_legend', name: 'Legend', icon: '👑', desc: 'Ultimate legendary skin', price: 300, type: 'skin', effect: 'legend' }
+                { id: 'skin_gold', name: 'Gold Defender', icon: '🌟', desc: 'Golden ship skin', price: 200, type: 'skin', effect: 'gold' },
+                { id: 'skin_crimson', name: 'Crimson Fury', icon: '🔴', desc: 'Red plasma ship', price: 300, type: 'skin', effect: 'crimson' },
+                { id: 'skin_phantom', name: 'Phantom', icon: '👻', desc: 'Ghostly transparent ship', price: 400, type: 'skin', effect: 'phantom' },
+                { id: 'skin_nebula', name: 'Nebula', icon: '🌌', desc: 'Cosmic rainbow ship', price: 600, type: 'skin', effect: 'nebula' },
+                { id: 'skin_legend', name: 'Legend', icon: '👑', desc: 'Ultimate legendary skin', price: 1000, type: 'skin', effect: 'legend' }
             ],
             boosts: [
-                { id: 'boost_start', name: 'Head Start', icon: '🚀', desc: 'Start at Wave 3 with bonus', price: 300, type: 'boost', effect: 'headStart' },
-                { id: 'boost_coins', name: 'Coin Magnet', icon: '🧲', desc: '2x points from all enemies', price: 600, type: 'boost', effect: 'coinMagnet' },
-                { id: 'boost_time', name: 'Time Warp', icon: '⏰', desc: 'Slow enemies by 25%', price: 900, type: 'boost', effect: 'timeWarp' },
-                { id: 'boost_combo', name: 'Combo Master', icon: '⚡', desc: 'Combo lasts 2x longer', price: 700, type: 'boost', effect: 'comboMaster' }
+                { id: 'boost_start', name: 'Head Start', icon: '🚀', desc: 'Start at Wave 3 with bonus', price: 500, type: 'boost', effect: 'headStart' },
+                { id: 'boost_coins', name: 'Coin Magnet', icon: '🧲', desc: '2x points from all enemies', price: 900, type: 'boost', effect: 'coinMagnet' },
+                { id: 'boost_time', name: 'Time Warp', icon: '⏰', desc: 'Slow enemies by 25%', price: 1300, type: 'boost', effect: 'timeWarp' },
+                { id: 'boost_combo', name: 'Combo Master', icon: '⚡', desc: 'Combo lasts 2x longer', price: 1100, type: 'boost', effect: 'comboMaster' }
             ]
         };
+
         function saveGameData() {
             const pointsKey = 'neonPoints_' + currentPlayerName;
             const ownedKey = 'ownedItems_' + currentPlayerName;
@@ -5335,6 +5561,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             localStorage.setItem(boostsKey, JSON.stringify(equippedBoosts));
             loadActiveEffects();
         }
+
         function loadPlayerData() {
             const pointsKey = 'neonPoints_' + currentPlayerName;
             const ownedKey = 'ownedItems_' + currentPlayerName;
@@ -5349,18 +5576,21 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             loadActiveEffects();
             updatePointsDisplay();
         }
+
         function updatePointsDisplay() {
             const pointsSpan = document.getElementById('pointsValue');
             const storePoints = document.getElementById('storePoints');
             if (pointsSpan) pointsSpan.textContent = userPoints.toLocaleString();
             if (storePoints) storePoints.textContent = userPoints.toLocaleString();
         }
+
         function openStore() {
             renderStoreItems();
             updatePointsDisplay();
             document.getElementById('storePopup').classList.add('active');
             playSound('powerup', 0.15);
         }
+
         function renderStoreItems() {
             const powerupsGrid = document.getElementById('powerupsGrid');
             powerupsGrid.innerHTML = storeItems.powerups.map(item => createStoreItemHTML(item)).join('');
@@ -5369,6 +5599,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             const boostsGrid = document.getElementById('boostsGrid');
             boostsGrid.innerHTML = storeItems.boosts.map(item => createStoreItemHTML(item)).join('');
         }
+
         function createStoreItemHTML(item) {
             const isOwned = ownedItems.includes(item.id);
             const isEquipped = (item.type === 'skin' && equippedSkin === item.id) ||
@@ -5406,6 +5637,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
 </div>
 `;
         }
+
         function buyItem(itemId) {
             const allItems = [...storeItems.powerups, ...storeItems.skins, ...storeItems.boosts];
             const item = allItems.find(i => i.id === itemId);
@@ -5424,6 +5656,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 showToast(`Not enough points! Need ${item.price} points`, true);
             }
         }
+
         function equipItem(itemId, type) {
             if (!ownedItems.includes(itemId)) {
                 showToast(`You don't own ${itemId}!`, true);
@@ -5453,6 +5686,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             saveGameData();
             renderStoreItems();
         }
+
         function unequipItem(itemId, type) {
             if (type === 'skin') {
                 equippedSkin = 'default';
@@ -5474,13 +5708,16 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             saveGameData();
             renderStoreItems();
         }
+
         function closePopup(popupId) {
             document.getElementById(popupId).classList.remove('active');
         }
+
         function openAllModesPopup() {
             document.getElementById('allModesPopup').classList.add('active');
             playSound('powerup', 0.15);
         }
+
         function handleAllModePlay(mode) {
             closePopup('allModesPopup');
             if (mode === 'timer') {
@@ -5493,6 +5730,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 showStartScreen(mode);
             }
         }
+
+        // ==================== LOADING SCREEN ====================
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingBar = document.getElementById('loadingBar');
         const loadingStatus = document.getElementById('loadingStatus');
@@ -5511,7 +5750,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         if (bgmEnabled) {
                             startBGM();
                         }
-                        // Start refresh timer
                         resetRefreshTimer();
                     }, 1000);
                 }, 500);
@@ -5522,8 +5760,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             else if (loadingProgress < 90) loadingStatus.textContent = 'CALIBRATING DEFENSES...';
             else loadingStatus.textContent = 'READY TO DEPLOY';
         }, 150);
+
+        // ==================== CANVAS SETUP ====================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+
         function resizeCanvas() {
             const maxWidth = Math.min(window.innerWidth - 40, 900);
             const maxHeight = Math.min(window.innerHeight - 40, 700);
@@ -5535,6 +5776,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         window.addEventListener('orientationchange', function () {
             setTimeout(resizeCanvas, 100);
         });
+
+        // ==================== GAME STATE ====================
         let gameRunning = false;
         let gamePaused = false;
         let currentMode = 'infinity';
@@ -5560,6 +5803,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         let coreExplosionTimer = 0;
         let coreExplosionParticles = [];
         let highScores = { infinity: 0, hard: 0, survival: 0, friends: 0, timer: 0 };
+
         let modeConfig = {
             infinity: { name: 'INFINITY', enemySpeedMult: 1, spawnIntervalBase: 60, health: 100, orbitalBlastEnabled: true, waveDuration: 600, scoreMultiplier: 1 },
             hard: { name: 'HARD', enemySpeedMult: 1.5, spawnIntervalBase: 45, health: 50, orbitalBlastEnabled: false, waveDuration: 450, scoreMultiplier: 2 },
@@ -5568,16 +5812,17 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             timer: { name: 'TIMER', enemySpeedMult: 1.3, spawnIntervalBase: 40, health: 100, orbitalBlastEnabled: true, waveDuration: 400, scoreMultiplier: 2 },
             level: { name: 'LEVEL', enemySpeedMult: 1, spawnIntervalBase: 55, health: 100, orbitalBlastEnabled: true, waveDuration: 450, scoreMultiplier: 1 }
         };
+
         const centerX = () => canvas.width / 2;
         const centerY = () => canvas.height / 2;
+
         let enemies = [];
         let bullets = [];
         let particles = [];
         let stars = [];
         let orbitalRings = [];
-        
-        // ==================== ADDED: ENEMY TYPES WITH INCREASED CORE DAMAGE VALUES ====================
-        // Each enemy type now has increased coreDamage - enemies hit the core harder
+
+        // ==================== ENEMY TYPES ====================
         let baseEnemyTypes = [
             { color: '#ff0044', speed: 1.2, size: 15, health: 1, score: CONSTANT_SCORE_VALUE, shape: 'triangle', coreDamage: INCREASED_CORE_DAMAGE.triangle, isHighDamage: false },
             { color: '#ff8800', speed: 1.5, size: 12, health: 1, score: CONSTANT_SCORE_VALUE, shape: 'square', coreDamage: INCREASED_CORE_DAMAGE.square, isHighDamage: false },
@@ -5590,7 +5835,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             { color: '#aaff44', speed: 1.5, size: 16, health: 2, score: CONSTANT_SCORE_VALUE, shape: 'crescent', coreDamage: INCREASED_CORE_DAMAGE.crescent, isHighDamage: false },
             { color: '#ffaa44', speed: 1.3, size: 14, health: 2, score: CONSTANT_SCORE_VALUE, shape: 'cross', coreDamage: INCREASED_CORE_DAMAGE.cross, isHighDamage: true }
         ];
-        // ADDED: New enemy type that increases shooting damage when destroyed, spawns based on wave
+
         const damageBoostEnemyType = {
             color: '#00ffff',
             speed: 1.2,
@@ -5602,18 +5847,14 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             coreDamage: INCREASED_CORE_DAMAGE.damageBoost,
             isHighDamage: false
         };
-        
-        // ==================== ADDED: HIGH DAMAGE ENEMY TYPES (5% spawn chance) ====================
-        // These enemies deal massive damage to the core and are visually distinctive
+
         const highDamageEnemyTypes = [
             { color: '#ff0044', speed: 1.0, size: 28, health: 6, score: CONSTANT_SCORE_VALUE, shape: 'skull', coreDamage: INCREASED_CORE_DAMAGE.skull, isHighDamage: true, name: 'DESTROYER' },
             { color: '#ff6600', speed: 0.7, size: 30, health: 8, score: CONSTANT_SCORE_VALUE, shape: 'hexagon', coreDamage: INCREASED_CORE_DAMAGE.colossus, isHighDamage: true, name: 'COLOSSUS' },
             { color: '#aa00ff', speed: 1.1, size: 24, health: 5, score: CONSTANT_SCORE_VALUE, shape: 'star', coreDamage: INCREASED_CORE_DAMAGE.nightmare, isHighDamage: true, name: 'NIGHTMARE' },
             { color: '#ff00aa', speed: 1.4, size: 20, health: 4, score: CONSTANT_SCORE_VALUE, shape: 'triangle', coreDamage: INCREASED_CORE_DAMAGE.razor, isHighDamage: true, name: 'RAZOR' }
         ];
-        
-        // ==================== ADDED: LOW DAMAGE ENEMY TYPES ====================
-        // These enemies deal minimal core damage but are more numerous
+
         const lowDamageEnemyTypes = [
             { color: '#88ffaa', speed: 1.6, size: 10, health: 1, score: CONSTANT_SCORE_VALUE, shape: 'circle', coreDamage: INCREASED_CORE_DAMAGE.spark, isHighDamage: false, name: 'SPARK' },
             { color: '#aaffaa', speed: 1.7, size: 9, health: 1, score: CONSTANT_SCORE_VALUE, shape: 'diamond', coreDamage: INCREASED_CORE_DAMAGE.flicker, isHighDamage: false, name: 'FLICKER' },
@@ -5632,26 +5873,18 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
 
         function resetDamageMultiplier() {
             playerDamageMultiplier = 1.0;
-            // Also show a subtle message when reset happens
             showToast(`⚠️ Damage multiplier reset to 1.0x due to core damage!`, false);
             playSound('hit', 0.2);
         }
 
-        // ==================== ADDED: WAVE ENEMY COUNT SYSTEM ====================
-        // Enemy count increases based on wave number - makes game more complex
-        let enemiesToSpawnPerInterval = 1;
-        let waveEnemyCount = 3; // Base enemies per wave
+        // ==================== WAVE SYSTEM ====================
+        let waveEnemyCount = 3;
         let waveSpawnTimer = 0;
-        let waveSpawnDelay = 0;
         let isSpawningWaveBatch = false;
         let waveBatchRemaining = 0;
 
         function updateWaveEnemyCount() {
-            // Calculate how many enemies should spawn in this wave based on wave number
-            // Formula: base 3 + wave * 0.8 (capped at 40 enemies max)
             waveEnemyCount = Math.min(40, Math.floor(3 + wave * 0.8));
-            
-            // Update visual display
             const badge = document.getElementById('waveCountBadge');
             if (badge) {
                 badge.textContent = `⚔️ WAVE ${wave}: ${waveEnemyCount} ENEMIES ⚔️`;
@@ -5660,8 +5893,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     if (badge) badge.style.animation = 'pulse 0.5s ease';
                 }, 10);
             }
-            
-            // Reset spawn tracking for new wave
             waveSpawnTimer = 0;
             waveBatchRemaining = waveEnemyCount;
             isSpawningWaveBatch = true;
@@ -5670,20 +5901,14 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         }
 
         function checkWaveCompletion() {
-            // Check if all enemies in current wave have been defeated
             if (waveBatchRemaining <= 0 && enemies.length === 0 && isSpawningWaveBatch) {
                 isSpawningWaveBatch = false;
-                // Wave completed - advance to next wave
                 wave++;
                 document.getElementById('wave').textContent = 'WAVE ' + wave;
                 const waveEl = document.getElementById('wave');
                 waveEl.style.transform = 'scale(1.5)';
                 setTimeout(() => waveEl.style.transform = 'scale(1)', 300);
-                
-                // Update enemy count for new wave
                 updateWaveEnemyCount();
-                
-                // Extra reward for clearing the wave
                 let waveBonus = 50 + Math.floor(wave * 2);
                 if (!isFriendsMode && currentMode !== 'level') {
                     score += waveBonus;
@@ -5691,8 +5916,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
                 showToast(`⭐ WAVE ${wave} CLEARED! +${waveBonus} BONUS! ⭐`, false);
                 playSound('powerup', 0.3);
-                
-                // Show interstitial ad every 3-5 waves
                 waveCounterForAd++;
                 if (waveCounterForAd >= WAVES_BETWEEN_ADS && !gamePaused && gameRunning && currentMode !== 'level') {
                     waveCounterForAd = 0;
@@ -5702,27 +5925,19 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         }
 
         function getDynamicSpawnInterval() {
-            // Spawn enemies faster as wave number increases
             let config = modeConfig[currentMode];
             let baseSpawnInterval = config.spawnIntervalBase;
-            
-            // Reduce spawn interval based on wave (more enemies faster)
             let waveReduction = Math.min(25, Math.floor(wave / 5));
             let dynamicInterval = Math.max(25, baseSpawnInterval - waveReduction);
-            
-            // Adjust for wave enemy count - spawn faster when many enemies remain
             if (waveBatchRemaining > 15) {
                 dynamicInterval = Math.max(20, dynamicInterval - 5);
             } else if (waveBatchRemaining > 8) {
                 dynamicInterval = Math.max(22, dynamicInterval - 3);
             }
-            
             return dynamicInterval;
         }
 
         function getEnemiesToSpawnPerBatch() {
-            // Determine how many enemies to spawn in this batch
-            // Higher waves spawn more enemies at once
             if (wave <= 5) return 1;
             if (wave <= 10) return Math.min(2, waveBatchRemaining);
             if (wave <= 20) return Math.min(3, waveBatchRemaining);
@@ -5740,15 +5955,14 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (currentWave >= 20) available.push({ color: '#ff44aa', speed: 1.9, size: 8, health: 1, score: CONSTANT_SCORE_VALUE, shape: 'arrow', coreDamage: INCREASED_CORE_DAMAGE.arrow, isHighDamage: false });
             if (currentWave >= 25) available.push({ color: '#aaff44', speed: 1.5, size: 16, health: 2, score: CONSTANT_SCORE_VALUE, shape: 'crescent', coreDamage: INCREASED_CORE_DAMAGE.crescent, isHighDamage: false });
             if (currentWave >= 30) available.push({ color: '#ffaa44', speed: 1.3, size: 14, health: 2, score: CONSTANT_SCORE_VALUE, shape: 'cross', coreDamage: INCREASED_CORE_DAMAGE.cross, isHighDamage: true });
-            // ADDED: High damage enemies spawn more frequently at higher waves
             if (currentWave >= 12) available.push(...highDamageEnemyTypes);
-            // ADDED: Low damage enemies spawn at all waves
             if (currentWave >= 1) available.push(...lowDamageEnemyTypes);
             return available;
         }
+
         let spawnTimer = 0;
         let spawnInterval = 60;
-        let damageBoostSpawnCounter = 0;
+
         function spawnEnemy() {
             spawnTimer++;
             let config = modeConfig[currentMode];
@@ -5756,28 +5970,23 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (activeBoostEffects.timeWarp && !isFriendsMode) speedMultiplier *= 0.85;
             let waveSpeedBonus = Math.min(1 + (wave - 1) * 0.025, 1.8);
             let finalSpeedMultiplier = Math.min(speedMultiplier * waveSpeedBonus, 2.2);
-
-            // NEW: Dynamic spawn interval based on wave
             let currentSpawnInterval = getDynamicSpawnInterval();
 
             if (spawnTimer >= currentSpawnInterval && waveBatchRemaining > 0) {
                 spawnTimer = 0;
-                
-                // Determine how many enemies to spawn now
                 let enemiesThisBatch = getEnemiesToSpawnPerBatch();
                 enemiesThisBatch = Math.min(enemiesThisBatch, waveBatchRemaining);
-                
+
                 for (let batchIdx = 0; batchIdx < enemiesThisBatch; batchIdx++) {
                     const types = getEnemyTypesByWave(wave);
                     const randomVal = Math.random();
                     let newEnemy = null;
-                    
-                    // CHANGED: Damage boost enemy spawns based on wave progression using getDamageBoostSpawnChance()
                     const damageBoostChance = getDamageBoostSpawnChance();
+
                     if (randomVal < damageBoostChance) {
                         const damageType = { ...damageBoostEnemyType };
                         damageType.speed = Math.min(damageType.speed * finalSpeedMultiplier, damageType.speed * 1.8);
-                        damageType.health = damageBoostEnemyType.health; // CONSTANT health
+                        damageType.health = damageBoostEnemyType.health;
                         damageType.score = CONSTANT_SCORE_VALUE;
                         damageType.coreDamage = damageBoostEnemyType.coreDamage;
                         damageType.isHighDamage = damageBoostEnemyType.isHighDamage;
@@ -5790,11 +5999,9 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         const type = types[Math.floor(Math.random() * types.length)];
                         const clonedType = { ...type };
                         clonedType.speed = Math.min(type.speed * finalSpeedMultiplier, type.speed * 1.8);
-                        // HEALTH REMAINS CONSTANT - NO WAVE SCALING
                         clonedType.health = type.health;
-                        clonedType.score = CONSTANT_SCORE_VALUE; // All enemies give exactly 2 points
+                        clonedType.score = CONSTANT_SCORE_VALUE;
                         clonedType.coreDamage = type.coreDamage;
-                        // Check if this is a high damage enemy (5% chance overall)
                         let isHighDamageThisEnemy = false;
                         if (clonedType.isHighDamage === true && Math.random() < HIGH_DAMAGE_SPAWN_CHANCE) {
                             isHighDamageThisEnemy = true;
@@ -5808,39 +6015,41 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         newEnemy.maxHealth = newEnemy.type.health;
                         newEnemy.coreDamageAmount = clonedType.coreDamage;
                         newEnemy.isHighDamageEnemy = clonedType.isHighDamage;
-                        // Force score to constant value
                         newEnemy.type.score = CONSTANT_SCORE_VALUE;
                     }
-                    
+
                     enemies.push(newEnemy);
                     waveBatchRemaining--;
-                    
-                    // Spawn particles for visual effect when multiple enemies spawn
+
                     if (enemiesThisBatch > 1) {
                         for (let p = 0; p < 3; p++) {
                             particles.push(new Particle(centerX() + (Math.random() - 0.5) * 100, centerY() + (Math.random() - 0.5) * 100, '#ff00ff', 4, 3));
                         }
                     }
                 }
-                
-                // Show remaining enemies count occasionally
+
                 if (waveBatchRemaining > 0 && waveBatchRemaining % 5 === 0 && waveBatchRemaining < waveEnemyCount) {
                     showToast(`⚔️ ${waveBatchRemaining} enemies remaining in Wave ${wave} ⚔️`, false);
                 }
             }
         }
+
+        // ==================== KEYBOARD AND MOUSE EVENTS ====================
         const keys = {};
         let mouseDown = false;
+
         document.addEventListener('keydown', (e) => {
             keys[e.code] = true;
             if (e.code === 'Space') { e.preventDefault(); if (!isFriendsMode) orbitalBlast(); }
             if (e.code === 'Escape') { e.preventDefault(); if (gamePaused) resumeGame(); else if (gameRunning) pauseGame(); }
             if (e.code === 'Enter') { e.preventDefault(); if (isFriendsMode && gameRunning && !gamePaused) { p2.shooting = true; } }
         });
+
         document.addEventListener('keyup', (e) => {
             keys[e.code] = false;
             if (e.code === 'Enter' && isFriendsMode) { p2.shooting = false; }
         });
+
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -5850,35 +6059,67 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             mouseX = Math.max(0, Math.min(canvas.width, mouseX));
             mouseY = Math.max(0, Math.min(canvas.height, mouseY));
         });
+
         canvas.addEventListener('mousedown', (e) => {
             if (!isFriendsMode) { mouseDown = true; shoot(); }
         });
+
         canvas.addEventListener('mouseup', () => { mouseDown = false; });
+
+        // ==================== TOUCH EVENTS FOR TOUCH CONTROL MODE ====================
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            if (!isFriendsMode && gameRunning && !gamePaused) {
-                const rect = canvas.getBoundingClientRect();
-                const touch = e.touches[0];
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-                mouseX = (touch.clientX - rect.left) * scaleX;
-                mouseY = (touch.clientY - rect.top) * scaleY;
-                mouseX = Math.max(0, Math.min(canvas.width, mouseX));
-                mouseY = Math.max(0, Math.min(canvas.height, mouseY));
-                shoot();
-            }
+            if (!gameRunning || gamePaused) return;
+            if (isFriendsMode) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const touch = e.touches[0];
+
+            mouseX = (touch.clientX - rect.left) * scaleX;
+            mouseY = (touch.clientY - rect.top) * scaleY;
+            mouseX = Math.max(0, Math.min(canvas.width, mouseX));
+            mouseY = Math.max(0, Math.min(canvas.height, mouseY));
+
+            shoot();
         });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!gameRunning || gamePaused) return;
+            if (isFriendsMode) return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const touch = e.touches[0];
+            mouseX = (touch.clientX - rect.left) * scaleX;
+            mouseY = (touch.clientY - rect.top) * scaleY;
+            mouseX = Math.max(0, Math.min(canvas.width, mouseX));
+            mouseY = Math.max(0, Math.min(canvas.height, mouseY));
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+        });
+
+        // ==================== PARTICLE CLASS ====================
         class Particle {
             constructor(x, y, color, speed, size) {
-                this.x = x; this.y = y; this.color = color;
+                this.x = x;
+                this.y = y;
+                this.color = color;
                 this.vx = (Math.random() - 0.5) * speed;
                 this.vy = (Math.random() - 0.5) * speed;
-                this.size = size; this.life = 1;
+                this.size = size;
+                this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.01;
             }
             update() {
-                this.x += this.vx; this.y += this.vy;
-                this.life -= this.decay; this.size *= 0.98;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.size *= 0.98;
             }
             draw() {
                 ctx.save();
@@ -5890,6 +6131,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.restore();
             }
         }
+
+        // ==================== ENEMY CLASS ====================
         class Enemy {
             constructor(type) {
                 const angle = Math.random() * Math.PI * 2;
@@ -5913,7 +6156,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 this.targetPlayer = null;
                 this.isDamageBoostEnemy = false;
                 this.damageBoostValue = 0;
-                // ADDED: Core damage properties (INCREASED VALUES)
                 this.coreDamageAmount = type.coreDamage || 15;
                 this.isHighDamageEnemy = type.isHighDamage || false;
             }
@@ -5967,7 +6209,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     ctx.shadowBlur = 20;
                     ctx.shadowColor = '#00ffff';
                 } else if (this.isHighDamageEnemy) {
-                    // High damage enemies have a pulsing red glow
                     const pulse = (Math.sin(Date.now() / 150) + 1) / 2;
                     const r = 255;
                     const g = Math.floor(30 + pulse * 50);
@@ -5975,7 +6216,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     enemyColor = `rgb(${r}, ${g}, ${b})`;
                     ctx.shadowBlur = 25;
                     ctx.shadowColor = '#ff0000';
-                    // Draw skull icon on high damage enemies
                     ctx.restore();
                     ctx.save();
                     ctx.translate(this.x, this.y);
@@ -5995,7 +6235,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 const size = this.type.size;
-                switch(this.type.shape) {
+                switch (this.type.shape) {
                     case 'triangle':
                         ctx.moveTo(0, -size);
                         ctx.lineTo(-size * 0.866, size * 0.5);
@@ -6069,7 +6309,6 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         ctx.rect(-size, -size * 0.3, size * 2, size * 0.6);
                         break;
                     case 'skull':
-                        // Draw a skull shape for high damage enemies
                         ctx.arc(0, 0, size, 0, Math.PI * 2);
                         ctx.fill();
                         ctx.fillStyle = '#000';
@@ -6082,7 +6321,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         ctx.fill();
                         break;
                 }
-                ctx.fill(); ctx.stroke();
+                ctx.fill();
+                ctx.stroke();
                 if (this.isDamageBoostEnemy) {
                     ctx.restore();
                     ctx.save();
@@ -6092,7 +6332,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     ctx.fillStyle = '#ffffff';
                     ctx.shadowBlur = 8;
                     ctx.shadowColor = '#00ffff';
-                    ctx.fillText('⚡', -size/2, -size - 5);
+                    ctx.fillText('⚡', -size / 2, -size - 5);
                     ctx.fillText('DAMAGE', -22, -size - 12);
                 }
                 if (this.maxHealth > 1) {
@@ -6111,9 +6351,12 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 return this.health <= 0;
             }
         }
+
+        // ==================== BULLET CLASS ====================
         class Bullet {
             constructor(x, y, angle, owner) {
-                this.x = x; this.y = y;
+                this.x = x;
+                this.y = y;
                 this.speed = activePowerupEffects.rapidFire && !isFriendsMode ? 16 : 12;
                 this.vx = Math.cos(angle) * this.speed;
                 this.vy = Math.sin(angle) * this.speed;
@@ -6123,7 +6366,9 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 this.damage = 1;
             }
             update() {
-                this.x += this.vx; this.y += this.vy; this.life--;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
                 return this.life <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height;
             }
             draw() {
@@ -6137,6 +6382,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.restore();
             }
         }
+
+        // ==================== INITIALIZATION ====================
         function initStars() {
             stars = [];
             for (let i = 0; i < 150; i++) {
@@ -6149,6 +6396,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 });
             }
         }
+
         function initOrbitalRings() {
             orbitalRings = [
                 { radius: 80, speed: 0.02, offset: 0 },
@@ -6156,16 +6404,21 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 { radius: 160, speed: 0.01, offset: Math.PI * 2 / 3 }
             ];
         }
+
+        // ==================== WAVE TIMER ====================
         let waveTimer = 0;
         let waveDuration = 600;
+
         function updateWave() {
             const config = modeConfig[currentMode];
             waveTimer++;
-            // NEW: Check if wave batch is complete
             checkWaveCompletion();
         }
+
+        // ==================== SHOOTING ====================
         let canShoot = true;
         let shootCooldown = 0;
+
         function shoot() {
             if (!canShoot || !gameRunning || gamePaused || isFriendsMode) return;
             const angle = Math.atan2(mouseY - centerY(), mouseX - centerX());
@@ -6177,18 +6430,20 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             shootCooldown = activePowerupEffects.rapidFire ? 5 : 10;
             playSound('shoot', 0.15);
         }
+
         let p1CanShoot = true;
         let p1ShootCooldown = 0;
         let p2CanShoot = true;
         let p2ShootCooldown = 0;
-        // ADDED: Hold-to-shoot flags for continuous fire on mobile
+
+        // ==================== HOLD-TO-SHOOT ====================
         let p1ShootHold = false;
         let p2ShootHold = false;
         let singleShootHold = false;
         let p1HoldInterval = null;
         let p2HoldInterval = null;
         let singleHoldInterval = null;
-        
+
         function startContinuousShoot(player) {
             if (player === 'p1' && !p1ShootHold && p1.health > 0) {
                 p1ShootHold = true;
@@ -6225,7 +6480,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }, 150);
             }
         }
-        
+
         function stopContinuousShoot(player) {
             if (player === 'p1') {
                 p1ShootHold = false;
@@ -6247,7 +6502,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             }
         }
-        
+
         function shootFriends(player) {
             if (!gameRunning || gamePaused || !isFriendsMode) return;
             if (player === 'p1' && (!p1CanShoot || p1.health <= 0)) return;
@@ -6258,10 +6513,12 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             for (let i = 0; i < 3; i++) {
                 particles.push(new Particle(p.x + Math.cos(p.angle) * 25, p.y + Math.sin(p.angle) * 25, color, 3, 3));
             }
-            if (player === 'p1') { p1CanShoot = false; p1ShootCooldown = activePowerupEffects.rapidFire ? 6 : 12; }
-            else { p2CanShoot = false; p2ShootCooldown = activePowerupEffects.rapidFire ? 6 : 12; }
+            if (player === 'p1') { p1CanShoot = false;
+                p1ShootCooldown = activePowerupEffects.rapidFire ? 6 : 12; } else { p2CanShoot = false;
+                p2ShootCooldown = activePowerupEffects.rapidFire ? 6 : 12; }
             playSound('shoot', 0.15);
         }
+
         function orbitalBlast() {
             const config = modeConfig[currentMode];
             if (orbitalBlastCooldown > 0 || !gameRunning || gamePaused || !config.orbitalBlastEnabled || isFriendsMode) return;
@@ -6271,7 +6528,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
                 let multiplier = globalScoreMultiplier;
                 if (activeBoostEffects.coinMagnet) multiplier *= 2;
-                let pointsEarned = CONSTANT_SCORE_VALUE; // CHANGED: Always constant points per enemy
+                let pointsEarned = CONSTANT_SCORE_VALUE;
                 score += pointsEarned;
                 if (enemy.isDamageBoostEnemy && enemy.health <= 0) {
                     applyDamageBoostFromEnemy();
@@ -6286,6 +6543,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             updateScore();
             playSound('blast', 0.4);
         }
+
         function friendsOrbitalBlast(player) {
             const p = player === 'p1' ? p1 : p2;
             if (p.blastCooldown > 0 || p.health <= 0 || !gameRunning || gamePaused) return;
@@ -6302,7 +6560,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     }
                     let multiplier = globalScoreMultiplier;
                     if (activeBoostEffects.coinMagnet) multiplier *= 2;
-                    let pointsEarned = CONSTANT_SCORE_VALUE; // CHANGED: Always constant points per enemy
+                    let pointsEarned = CONSTANT_SCORE_VALUE;
                     p.score += pointsEarned;
                     if (enemies[i].isDamageBoostEnemy) {
                         applyDamageBoostFromEnemy();
@@ -6314,6 +6572,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             updateFriendsUI();
             playSound('blast', 0.35);
         }
+
         function addCombo() {
             combo++;
             const comboEl = document.getElementById('combo');
@@ -6321,8 +6580,10 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             comboEl.classList.add('show');
             clearTimeout(comboTimer);
             let comboDuration = activeBoostEffects.comboMaster ? 4000 : 2000;
-            comboTimer = setTimeout(() => { combo = 0; comboEl.classList.remove('show'); }, comboDuration);
+            comboTimer = setTimeout(() => { combo = 0;
+                comboEl.classList.remove('show'); }, comboDuration);
         }
+
         function updateScore() {
             if (currentMode === 'level' && levelModeActive && !levelCompletedFlag) {
                 document.getElementById('score').textContent = `${score} / ${levelTargetScore}`;
@@ -6341,6 +6602,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 document.getElementById('score').style.color = '#00ffff';
             }
         }
+
         function updateHealth() {
             const fill = document.getElementById('coreHealthFill');
             fill.style.width = health + '%';
@@ -6348,6 +6610,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             else if (health > 30) fill.style.background = 'linear-gradient(90deg, #ff8800, #ffaa00)';
             else fill.style.background = 'linear-gradient(90deg, #ff0044, #ff6644)';
         }
+
         function updateFriendsUI() {
             document.getElementById('p1Score').textContent = p1.score;
             document.getElementById('p2Score').textContent = p2.score;
@@ -6361,6 +6624,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             else fill.style.background = 'linear-gradient(90deg, #ff0044, #ff6644)';
             updateCoopMobileHUD();
         }
+
         function updateCoopMobileHUD() {
             if (!isFriendsMode) return;
             const coopP1Score = document.getElementById('coopP1Score');
@@ -6372,6 +6636,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (coopP1Health) coopP1Health.style.width = p1.health + '%';
             if (coopP2Health) coopP2Health.style.width = p2.health + '%';
         }
+
         function triggerCoreExplosion() {
             coreExplosionActive = true;
             coreExplosionTimer = 0;
@@ -6385,7 +6650,10 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 const vy = Math.sin(angle) * speed;
                 const color = ['#ff0044', '#ff8800', '#ffff00', '#ff00ff'][Math.floor(Math.random() * 4)];
                 coreExplosionParticles.push({
-                    x: cx, y: cy, vx: vx, vy: vy,
+                    x: cx,
+                    y: cy,
+                    vx: vx,
+                    vy: vy,
                     size: Math.random() * 8 + 3,
                     life: 1,
                     color: color
@@ -6396,6 +6664,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             playSound('explosion', 0.5);
         }
+
         function drawCoreExplosion() {
             if (!coreExplosionActive) return;
             coreExplosionTimer++;
@@ -6420,8 +6689,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 coreExplosionParticles = [];
             }
         }
-        // CHANGED: Modified checkCollisions to ensure points are exactly constant value per enemy kill
-        // AND store points are increased by exactly 2 per enemy kill
+
+        // ==================== CHECK COLLISIONS ====================
         function checkCollisions() {
             const config = modeConfig[currentMode];
             for (let i = bullets.length - 1; i >= 0; i--) {
@@ -6434,10 +6703,9 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         if (enemy.takeDamage(damageAmount)) {
                             let multiplier = globalScoreMultiplier;
                             if (activeBoostEffects.coinMagnet && !isFriendsMode) multiplier *= 2;
-                            // CHANGED: Points are always constant value per enemy kill (2 points)
                             let pointsEarned = CONSTANT_SCORE_VALUE;
                             if (activePowerupEffects.scoreMult && !isFriendsMode) pointsEarned = Math.floor(pointsEarned * 2);
-                            
+
                             if (isFriendsMode) {
                                 if (bullet.owner === 'p1') p1.score += pointsEarned;
                                 else if (bullet.owner === 'p2') p2.score += pointsEarned;
@@ -6448,15 +6716,13 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                                     score += pointsEarned;
                                 }
                             }
-                            
-                            // ADDED: Increase store points by exactly 2 per enemy kill
-                            // This is separate from the game score
+
                             if (currentMode !== 'level') {
                                 userPoints += CONSTANT_SCORE_VALUE;
                                 saveGameData();
                                 updatePointsDisplay();
                             }
-                            
+
                             if (enemy.isDamageBoostEnemy) {
                                 applyDamageBoostFromEnemy();
                             }
@@ -6475,8 +6741,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             }
         }
-        let p1 = { x: 0, y: 0, score: 0, health: 100, angle: -Math.PI/2, shooting: false, blastCooldown: 0 };
-        let p2 = { x: 0, y: 0, score: 0, health: 100, angle: Math.PI/2, shooting: false, blastCooldown: 0 };
+
+        // ==================== PLAYER POSITIONS ====================
+        let p1 = { x: 0, y: 0, score: 0, health: 100, angle: -Math.PI / 2, shooting: false, blastCooldown: 0 };
+        let p2 = { x: 0, y: 0, score: 0, health: 100, angle: Math.PI / 2, shooting: false, blastCooldown: 0 };
+
         // ==================== SINGLE PLAYER JOYSTICK ====================
         let singleJoyActive = false;
         let singleJoyDelta = { x: 0, y: 0 };
@@ -6484,7 +6753,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         const singleThumb = document.getElementById('joyP1SingleThumb');
         const singleShootBtn = document.getElementById('mobileShootSingle');
         const singleBlastBtn = document.getElementById('mobileBlastSingle');
-        
+
         if (singleJoyElem) {
             singleJoyElem.addEventListener('touchstart', handleSingleJoystickStart);
             singleJoyElem.addEventListener('mousedown', handleSingleJoystickStart);
@@ -6493,47 +6762,49 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             window.addEventListener('touchend', handleSingleJoystickEnd);
             window.addEventListener('mouseup', handleSingleJoystickEnd);
         }
-        
+
         function handleSingleJoystickStart(e) {
             e.preventDefault();
             const rect = singleJoyElem.getBoundingClientRect();
-            const centerXJoy = rect.left + rect.width/2;
-            const centerYJoy = rect.top + rect.height/2;
+            const centerXJoy = rect.left + rect.width / 2;
+            const centerYJoy = rect.top + rect.height / 2;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             let dx = clientX - centerXJoy;
             let dy = clientY - centerYJoy;
-            const maxDist = rect.width/2;
+            const maxDist = rect.width / 2;
             const dist = Math.hypot(dx, dy);
-            if(dist > maxDist) { dx = dx * (maxDist/dist); dy = dy * (maxDist/dist); }
+            if (dist > maxDist) { dx = dx * (maxDist / dist);
+                dy = dy * (maxDist / dist); }
             singleJoyDelta = { x: dx / maxDist, y: dy / maxDist };
             singleJoyActive = true;
             singleThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         }
-        
+
         function handleSingleJoystickMove(e) {
-            if(!singleJoyActive) return;
+            if (!singleJoyActive) return;
             e.preventDefault();
             const rect = singleJoyElem.getBoundingClientRect();
-            const centerXJoy = rect.left + rect.width/2;
-            const centerYJoy = rect.top + rect.height/2;
+            const centerXJoy = rect.left + rect.width / 2;
+            const centerYJoy = rect.top + rect.height / 2;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             let dx = clientX - centerXJoy;
             let dy = clientY - centerYJoy;
-            const maxDist = rect.width/2;
+            const maxDist = rect.width / 2;
             const dist = Math.hypot(dx, dy);
-            if(dist > maxDist) { dx = dx * (maxDist/dist); dy = dy * (maxDist/dist); }
+            if (dist > maxDist) { dx = dx * (maxDist / dist);
+                dy = dy * (maxDist / dist); }
             singleJoyDelta = { x: dx / maxDist, y: dy / maxDist };
             singleThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         }
-        
+
         function handleSingleJoystickEnd(e) {
             singleJoyActive = false;
             singleJoyDelta = { x: 0, y: 0 };
             singleThumb.style.transform = 'translate(-50%, -50%)';
         }
-        
+
         function applySingleJoystickMovement() {
             if (isFriendsMode) return;
             if (singleJoyActive && gameRunning && !gamePaused) {
@@ -6544,72 +6815,89 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 mouseY = Math.max(0, Math.min(canvas.height, mouseY + dy));
             }
         }
-        
+
         if (singleShootBtn) {
             singleShootBtn.addEventListener('mousedown', () => startContinuousShoot('single'));
             singleShootBtn.addEventListener('mouseup', () => stopContinuousShoot('single'));
             singleShootBtn.addEventListener('mouseleave', () => stopContinuousShoot('single'));
-            singleShootBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startContinuousShoot('single'); });
-            singleShootBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopContinuousShoot('single'); });
-            singleShootBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); stopContinuousShoot('single'); });
+            singleShootBtn.addEventListener('touchstart', (e) => { e.preventDefault();
+                startContinuousShoot('single'); });
+            singleShootBtn.addEventListener('touchend', (e) => { e.preventDefault();
+                stopContinuousShoot('single'); });
+            singleShootBtn.addEventListener('touchcancel', (e) => { e.preventDefault();
+                stopContinuousShoot('single'); });
         }
-        
+
         if (singleBlastBtn) {
-            singleBlastBtn.addEventListener('click', () => { if(gameRunning && !gamePaused && !isFriendsMode) orbitalBlast(); });
-            singleBlastBtn.addEventListener('touchstart', (e) => { e.preventDefault(); if(gameRunning && !gamePaused && !isFriendsMode) orbitalBlast(); });
+            singleBlastBtn.addEventListener('click', () => { if (gameRunning && !gamePaused && !isFriendsMode) orbitalBlast(); });
+            singleBlastBtn.addEventListener('touchstart', (e) => { e.preventDefault(); if (gameRunning && !gamePaused && !isFriendsMode) orbitalBlast(); });
         }
-        
+
+        // ==================== CO-OP JOYSTICK ====================
         function handleCoopJoystickStart(e, isP1) {
             e.preventDefault();
             const rect = isP1 ? coopJoyP1Elem.getBoundingClientRect() : coopJoyP2Elem.getBoundingClientRect();
-            const centerXJoy = rect.left + rect.width/2;
-            const centerYJoy = rect.top + rect.height/2;
+            const centerXJoy = rect.left + rect.width / 2;
+            const centerYJoy = rect.top + rect.height / 2;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             let dx = clientX - centerXJoy;
             let dy = clientY - centerYJoy;
-            const maxDist = rect.width/2;
+            const maxDist = rect.width / 2;
             const dist = Math.hypot(dx, dy);
-            if(dist > maxDist) { dx = dx * (maxDist/dist); dy = dy * (maxDist/dist); }
+            if (dist > maxDist) { dx = dx * (maxDist / dist);
+                dy = dy * (maxDist / dist); }
             const normX = dx / maxDist;
             const normY = dy / maxDist;
-            if(isP1) { coopJoyDeltaP1 = { x: normX, y: normY }; coopJoyActiveP1 = true; }
-            else { coopJoyDeltaP2 = { x: normX, y: normY }; coopJoyActiveP2 = true; }
+            if (isP1) { coopJoyDeltaP1 = { x: normX, y: normY };
+                coopJoyActiveP1 = true; } else { coopJoyDeltaP2 = { x: normX, y: normY };
+                coopJoyActiveP2 = true; }
             const thumb = isP1 ? coopThumbP1 : coopThumbP2;
             thumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         }
+
         function handleCoopJoystickMove(e, isP1) {
-            if(!(isP1 ? coopJoyActiveP1 : coopJoyActiveP2)) return;
+            if (!(isP1 ? coopJoyActiveP1 : coopJoyActiveP2)) return;
             e.preventDefault();
             const rect = isP1 ? coopJoyP1Elem.getBoundingClientRect() : coopJoyP2Elem.getBoundingClientRect();
-            const centerXJoy = rect.left + rect.width/2;
-            const centerYJoy = rect.top + rect.height/2;
+            const centerXJoy = rect.left + rect.width / 2;
+            const centerYJoy = rect.top + rect.height / 2;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             let dx = clientX - centerXJoy;
             let dy = clientY - centerYJoy;
-            const maxDist = rect.width/2;
+            const maxDist = rect.width / 2;
             const dist = Math.hypot(dx, dy);
-            if(dist > maxDist) { dx = dx * (maxDist/dist); dy = dy * (maxDist/dist); }
+            if (dist > maxDist) { dx = dx * (maxDist / dist);
+                dy = dy * (maxDist / dist); }
             const normX = dx / maxDist;
             const normY = dy / maxDist;
-            if(isP1) coopJoyDeltaP1 = { x: normX, y: normY };
+            if (isP1) coopJoyDeltaP1 = { x: normX, y: normY };
             else coopJoyDeltaP2 = { x: normX, y: normY };
             const thumb = isP1 ? coopThumbP1 : coopThumbP2;
             thumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         }
+
         function handleCoopJoystickEnd(e, isP1) {
-            if(isP1) { coopJoyActiveP1 = false; coopJoyDeltaP1 = { x: 0, y: 0 }; coopThumbP1.style.transform = 'translate(-50%, -50%)'; }
-            else { coopJoyActiveP2 = false; coopJoyDeltaP2 = { x: 0, y: 0 }; coopThumbP2.style.transform = 'translate(-50%, -50%)'; }
+            if (isP1) { coopJoyActiveP1 = false;
+                coopJoyDeltaP1 = { x: 0, y: 0 };
+                coopThumbP1.style.transform = 'translate(-50%, -50%)'; } else { coopJoyActiveP2 = false;
+                coopJoyDeltaP2 = { x: 0, y: 0 };
+                coopThumbP2.style.transform = 'translate(-50%, -50%)'; }
         }
+
         function attachCoopJoystickEvents(elem, isP1) {
             elem.addEventListener('touchstart', (e) => handleCoopJoystickStart(e, isP1));
             elem.addEventListener('mousedown', (e) => handleCoopJoystickStart(e, isP1));
-            window.addEventListener('touchmove', (e) => { if(coopJoyActiveP1 || coopJoyActiveP2) { handleCoopJoystickMove(e, isP1); handleCoopJoystickMove(e, !isP1); } });
-            window.addEventListener('mousemove', (e) => { if(coopJoyActiveP1) handleCoopJoystickMove(e, true); if(coopJoyActiveP2) handleCoopJoystickMove(e, false); });
-            window.addEventListener('touchend', (e) => { handleCoopJoystickEnd(e, isP1); handleCoopJoystickEnd(e, !isP1); });
-            window.addEventListener('mouseup', (e) => { handleCoopJoystickEnd(e, isP1); handleCoopJoystickEnd(e, !isP1); });
+            window.addEventListener('touchmove', (e) => { if (coopJoyActiveP1 || coopJoyActiveP2) { handleCoopJoystickMove(e, isP1);
+                    handleCoopJoystickMove(e, !isP1); } });
+            window.addEventListener('mousemove', (e) => { if (coopJoyActiveP1) handleCoopJoystickMove(e, true); if (coopJoyActiveP2) handleCoopJoystickMove(e, false); });
+            window.addEventListener('touchend', (e) => { handleCoopJoystickEnd(e, isP1);
+                handleCoopJoystickEnd(e, !isP1); });
+            window.addEventListener('mouseup', (e) => { handleCoopJoystickEnd(e, isP1);
+                handleCoopJoystickEnd(e, !isP1); });
         }
+
         const coopJoyP1Elem = document.getElementById('coopJoyP1');
         const coopJoyP2Elem = document.getElementById('coopJoyP2');
         const coopThumbP1 = document.getElementById('coopJoyP1Thumb');
@@ -6620,58 +6908,73 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         const coopBlastP2 = document.getElementById('coopBlastP2');
         const coopMobileControlsDiv = document.getElementById('coopMobileControls');
         const coopMobileHUD = document.getElementById('coopMobileHUD');
+
         if (coopJoyP1Elem && coopJoyP2Elem) {
             attachCoopJoystickEvents(coopJoyP1Elem, true);
             attachCoopJoystickEvents(coopJoyP2Elem, false);
         }
+
         if (coopShootP1) {
             coopShootP1.addEventListener('mousedown', () => startContinuousShoot('p1'));
             coopShootP1.addEventListener('mouseup', () => stopContinuousShoot('p1'));
             coopShootP1.addEventListener('mouseleave', () => stopContinuousShoot('p1'));
-            coopShootP1.addEventListener('touchstart', (e) => { e.preventDefault(); startContinuousShoot('p1'); });
-            coopShootP1.addEventListener('touchend', (e) => { e.preventDefault(); stopContinuousShoot('p1'); });
-            coopShootP1.addEventListener('touchcancel', (e) => { e.preventDefault(); stopContinuousShoot('p1'); });
+            coopShootP1.addEventListener('touchstart', (e) => { e.preventDefault();
+                startContinuousShoot('p1'); });
+            coopShootP1.addEventListener('touchend', (e) => { e.preventDefault();
+                stopContinuousShoot('p1'); });
+            coopShootP1.addEventListener('touchcancel', (e) => { e.preventDefault();
+                stopContinuousShoot('p1'); });
         }
+
         if (coopShootP2) {
             coopShootP2.addEventListener('mousedown', () => startContinuousShoot('p2'));
             coopShootP2.addEventListener('mouseup', () => stopContinuousShoot('p2'));
             coopShootP2.addEventListener('mouseleave', () => stopContinuousShoot('p2'));
-            coopShootP2.addEventListener('touchstart', (e) => { e.preventDefault(); startContinuousShoot('p2'); });
-            coopShootP2.addEventListener('touchend', (e) => { e.preventDefault(); stopContinuousShoot('p2'); });
-            coopShootP2.addEventListener('touchcancel', (e) => { e.preventDefault(); stopContinuousShoot('p2'); });
+            coopShootP2.addEventListener('touchstart', (e) => { e.preventDefault();
+                startContinuousShoot('p2'); });
+            coopShootP2.addEventListener('touchend', (e) => { e.preventDefault();
+                stopContinuousShoot('p2'); });
+            coopShootP2.addEventListener('touchcancel', (e) => { e.preventDefault();
+                stopContinuousShoot('p2'); });
         }
+
         if (coopBlastP1) {
-            coopBlastP1.addEventListener('click', () => { if(gameRunning && !gamePaused && isFriendsMode && p1.health>0) friendsOrbitalBlast('p1'); });
+            coopBlastP1.addEventListener('click', () => { if (gameRunning && !gamePaused && isFriendsMode && p1.health > 0) friendsOrbitalBlast('p1'); });
         }
+
         if (coopBlastP2) {
-            coopBlastP2.addEventListener('click', () => { if(gameRunning && !gamePaused && isFriendsMode && p2.health>0) friendsOrbitalBlast('p2'); });
+            coopBlastP2.addEventListener('click', () => { if (gameRunning && !gamePaused && isFriendsMode && p2.health > 0) friendsOrbitalBlast('p2'); });
         }
+
         let coopJoyDeltaP1 = { x: 0, y: 0 };
         let coopJoyDeltaP2 = { x: 0, y: 0 };
         let coopJoyActiveP1 = false;
         let coopJoyActiveP2 = false;
+
         function applyCoopMobileMovement() {
-            if(!isFriendsMode || !gameRunning || gamePaused) return;
+            if (!isFriendsMode || !gameRunning || gamePaused) return;
             const speed = 4.5;
-            if(coopJoyActiveP1 && p1.health>0) {
+            if (coopJoyActiveP1 && p1.health > 0) {
                 p1.x += coopJoyDeltaP1.x * speed;
                 p1.y += coopJoyDeltaP1.y * speed;
-                if(coopJoyDeltaP1.x !==0 || coopJoyDeltaP1.y !==0) p1.angle = Math.atan2(coopJoyDeltaP1.y, coopJoyDeltaP1.x);
+                if (coopJoyDeltaP1.x !== 0 || coopJoyDeltaP1.y !== 0) p1.angle = Math.atan2(coopJoyDeltaP1.y, coopJoyDeltaP1.x);
                 p1.x = Math.max(30, Math.min(canvas.width - 30, p1.x));
                 p1.y = Math.max(30, Math.min(canvas.height - 30, p1.y));
             }
-            if(coopJoyActiveP2 && p2.health>0) {
+            if (coopJoyActiveP2 && p2.health > 0) {
                 p2.x += coopJoyDeltaP2.x * speed;
                 p2.y += coopJoyDeltaP2.y * speed;
-                if(coopJoyDeltaP2.x !==0 || coopJoyDeltaP2.y !==0) p2.angle = Math.atan2(coopJoyDeltaP2.y, coopJoyDeltaP2.x);
+                if (coopJoyDeltaP2.x !== 0 || coopJoyDeltaP2.y !== 0) p2.angle = Math.atan2(coopJoyDeltaP2.y, coopJoyDeltaP2.x);
                 p2.x = Math.max(30, Math.min(canvas.width - 30, p2.x));
                 p2.y = Math.max(30, Math.min(canvas.height - 30, p2.y));
             }
         }
+
         function updateFriendsPlayers() {
             const speed = 4;
             if (p1.health > 0) {
-                let dx1 = 0, dy1 = 0;
+                let dx1 = 0,
+                    dy1 = 0;
                 if (keys['KeyW']) dy1 -= 1;
                 if (keys['KeyS']) dy1 += 1;
                 if (keys['KeyA']) dx1 -= 1;
@@ -6689,7 +6992,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     let nearestDist = Infinity;
                     enemies.forEach(e => {
                         const d = Math.hypot(e.x - p1.x, e.y - p1.y);
-                        if (d < nearestDist) { nearestDist = d; nearest = e; }
+                        if (d < nearestDist) { nearestDist = d;
+                            nearest = e; }
                     });
                     if (nearest) p1.angle = Math.atan2(nearest.y - p1.y, nearest.x - p1.x);
                 }
@@ -6697,7 +7001,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 if (keys['ShiftLeft']) friendsOrbitalBlast('p1');
             }
             if (p2.health > 0) {
-                let dx2 = 0, dy2 = 0;
+                let dx2 = 0,
+                    dy2 = 0;
                 if (keys['ArrowUp']) dy2 -= 1;
                 if (keys['ArrowDown']) dy2 += 1;
                 if (keys['ArrowLeft']) dx2 -= 1;
@@ -6715,7 +7020,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     let nearestDist = Infinity;
                     enemies.forEach(e => {
                         const d = Math.hypot(e.x - p2.x, e.y - p2.y);
-                        if (d < nearestDist) { nearestDist = d; nearest = e; }
+                        if (d < nearestDist) { nearestDist = d;
+                            nearest = e; }
                     });
                     if (nearest) p2.angle = Math.atan2(nearest.y - p2.y, nearest.x - p2.x);
                 }
@@ -6728,6 +7034,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             }
         }
+
+        // ==================== DRAW FUNCTIONS ====================
         function drawBackground() {
             ctx.fillStyle = 'rgba(10, 10, 15, 0.3)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -6737,9 +7045,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
                 ctx.fill();
                 star.y += star.speed;
-                if (star.y > canvas.height) { star.y = 0; star.x = Math.random() * canvas.width; }
+                if (star.y > canvas.height) { star.y = 0;
+                    star.x = Math.random() * canvas.width; }
             });
         }
+
         function drawOrbitalRings() {
             const time = Date.now() / 1000;
             orbitalRings.forEach((ring, index) => {
@@ -6765,6 +7075,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.restore();
             });
         }
+
         function drawCore() {
             if (coreExplosionActive) return;
             const cx = centerX();
@@ -6792,6 +7103,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             ctx.arc(cx, cy, 10, 0, Math.PI * 2);
             ctx.fill();
         }
+
         function drawPlayer(player, color, label) {
             if (player.health <= 0) return;
             const skin = skinColors[equippedSkin] || skinColors.default;
@@ -6841,6 +7153,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             ctx.fillText(label, player.x, player.y - 25);
             ctx.restore();
         }
+
         function drawCooldown() {
             if (orbitalBlastCooldown > 0 && !isFriendsMode) {
                 const ratio = 1 - (orbitalBlastCooldown / orbitalBlastMaxCooldown);
@@ -6859,6 +7172,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.restore();
             }
         }
+
         function drawAimLine() {
             if (isFriendsMode) return;
             ctx.save();
@@ -6871,6 +7185,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             ctx.stroke();
             ctx.restore();
         }
+
         function drawSurvivalTime() {
             if (currentMode === 'survival') {
                 const minutes = Math.floor(survivalTime / 3600);
@@ -6886,6 +7201,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 ctx.restore();
             }
         }
+
         function drawTimerDisplay() {
             if (!isTimerMode || !gameRunning) return;
             const minutes = Math.floor(timerRemaining / 60);
@@ -6893,6 +7209,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             const timeStr = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
             document.getElementById('timerDisplay').textContent = timeStr;
         }
+
         function updateTimer() {
             if (!isTimerMode || !gameRunning || gamePaused) return;
             const now = Date.now();
@@ -6907,6 +7224,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 gameOver();
             }
         }
+
+        // ==================== GAME LOOP ====================
         function gameLoop() {
             if (!gameRunning || gamePaused) return;
             drawBackground();
@@ -6919,6 +7238,20 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (isFriendsMode) {
                 updateFriendsPlayers();
             }
+
+            // MODIFIED: In CO-OP mode, waves continue until BOTH players die AND core health is 0
+            if (isFriendsMode) {
+                if (p1.health <= 0 && p2.health <= 0 && health <= 0) {
+                    triggerCoreBlastAnimation();
+                    triggerCoreExplosion();
+                    gameOver();
+                    return;
+                }
+            }
+
+            // Update controls visibility based on game state
+            updateControlsVisibility();
+
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const result = enemies[i].update();
                 if (result) {
@@ -6947,11 +7280,18 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                                 showToast("Extra Life Activated!", false);
                                 playSound('powerup', 0.3);
                                 updateHealth();
-                            } else {
+                            } else if (!isFriendsMode) {
                                 triggerCoreBlastAnimation();
                                 triggerCoreExplosion();
                                 gameOver();
                                 return;
+                            } else {
+                                if (p1.health <= 0 && p2.health <= 0) {
+                                    triggerCoreBlastAnimation();
+                                    triggerCoreExplosion();
+                                    gameOver();
+                                    return;
+                                }
                             }
                         }
                     } else if (result.type === 'player') {
@@ -6969,9 +7309,13 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                         }
                         enemies.splice(i, 1);
                         playSound('hit', 0.2);
-                        if (isFriendsMode) {
-                            // Continue until both players die
-                        } else if (!isFriendsMode) {
+                        if (!isFriendsMode) {
+                            triggerCoreBlastAnimation();
+                            triggerCoreExplosion();
+                            gameOver();
+                            return;
+                        }
+                        if (isFriendsMode && p1.health <= 0 && p2.health <= 0 && health <= 0) {
                             triggerCoreBlastAnimation();
                             triggerCoreExplosion();
                             gameOver();
@@ -6982,25 +7326,30 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     enemies[i].draw();
                 }
             }
+
             for (let i = bullets.length - 1; i >= 0; i--) {
                 if (bullets[i].update()) bullets.splice(i, 1);
                 else bullets[i].draw();
             }
+
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
                 if (particles[i].life <= 0) particles.splice(i, 1);
                 else particles[i].draw();
             }
+
             checkCollisions();
             drawCoreExplosion();
             drawCore();
             drawCooldown();
             drawSurvivalTime();
             drawTimerDisplay();
+
             if (isFriendsMode) {
                 drawPlayer(p1, '#00ffff', 'P1');
                 drawPlayer(p2, '#ff00ff', 'P2');
             }
+
             if (shootCooldown > 0) { shootCooldown--; if (shootCooldown <= 0) canShoot = true; }
             if (p1ShootCooldown > 0) { p1ShootCooldown--; if (p1ShootCooldown <= 0) p1CanShoot = true; }
             if (p2ShootCooldown > 0) { p2ShootCooldown--; if (p2ShootCooldown <= 0) p2CanShoot = true; }
@@ -7009,17 +7358,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (p2.blastCooldown > 0) p2.blastCooldown--;
             if (mouseDown && !isFriendsMode) shoot();
             drawAimLine();
-            // Check if both players are dead OR core health is zero for co-op mode
-            if (isFriendsMode) {
-                if ((p1.health <= 0 && p2.health <= 0) || health <= 0) {
-                    triggerCoreBlastAnimation();
-                    triggerCoreExplosion();
-                    gameOver();
-                    return;
-                }
-            }
+
             requestAnimationFrame(gameLoop);
         }
+
+        // ==================== SCREEN MANAGEMENT ====================
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
             document.getElementById(screenId).style.display = 'flex';
@@ -7033,12 +7376,34 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 if (window.Android && Android.showBannerAd) {
                     showBannerAd();
                 }
+                hideAllControls();
             } else {
                 if (window.Android && Android.hideBannerAd) {
                     hideBannerAd();
                 }
             }
         }
+
+        function hideAllControls() {
+            const mobileControls = document.getElementById('mobileControls');
+            const coopControls = document.getElementById('coopMobileControls');
+            const mobileHUD = document.getElementById('coopMobileHUD');
+            const mobileInst = document.getElementById('mobileInst');
+            const coopHudTop = document.getElementById('coopHudTop');
+            const coopHudBottom = document.getElementById('coopHudBottom');
+
+            if (mobileControls) { mobileControls.style.display = 'none';
+                mobileControls.classList.remove('visible'); }
+            if (coopControls) { coopControls.style.display = 'none';
+                coopControls.classList.remove('visible'); }
+            if (mobileHUD) { mobileHUD.style.display = 'none';
+                mobileHUD.classList.remove('visible'); }
+            if (mobileInst) { mobileInst.style.display = 'none';
+                mobileInst.classList.remove('visible'); }
+            if (coopHudTop) coopHudTop.style.display = 'none';
+            if (coopHudBottom) coopHudBottom.style.display = 'none';
+        }
+
         function showHome() {
             gameRunning = false;
             gamePaused = false;
@@ -7059,15 +7424,15 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             document.getElementById('coreHealthLabel').textContent = 'CORE INTEGRITY';
             document.getElementById('modeIndicator').textContent = '';
             document.getElementById('timerDisplay').style.display = 'none';
-            document.getElementById('mobileControls').style.display = 'none';
-            if (coopMobileControlsDiv) coopMobileControlsDiv.style.display = 'none';
-            if (coopMobileHUD) coopMobileHUD.style.display = 'none';
+            hideAllControls();
             document.getElementById('pointsDisplay').style.display = 'block';
             if (isLoggedIn) {
                 document.getElementById('profileHomeBtn').style.display = 'flex';
             }
             document.body.classList.remove('coop-mode-active');
             document.body.classList.add('home-screen-active');
+            const musicBtn = document.getElementById('musicControlBtn');
+            if (musicBtn) musicBtn.style.display = 'flex';
             const totalHigh = Math.max(highScores.infinity, highScores.hard, highScores.survival, highScores.friends, highScores.timer);
             document.getElementById('highScoreDisplay').textContent = totalHigh;
             initStars();
@@ -7081,31 +7446,42 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 startBGM();
             }
             showBannerAd();
+            applyControlMode();
+            hideAllControls();
         }
+
         function showModeSelect() {
             showScreen('modeSelectScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
             showBannerAd();
+            hideAllControls();
         }
+
         function showFriendsSetup() {
             showScreen('friendsScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
             showBannerAd();
+            hideAllControls();
         }
+
         function showTimerScreen() {
             showScreen('timerScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
             showBannerAd();
+            hideAllControls();
         }
+
         function showAllModesScreen() {
             showScreen('allModesScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
             showBannerAd();
+            hideAllControls();
         }
+
         function showStartScreen(mode) {
             currentMode = mode;
             let config = modeConfig[mode];
@@ -7118,16 +7494,23 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             showScreen('startScreen');
             document.getElementById('profileHomeBtn').style.display = 'none';
             document.body.classList.remove('home-screen-active');
+            const musicBtn = document.getElementById('musicControlBtn');
+            if (musicBtn) musicBtn.style.display = 'none';
             hideBannerAd();
+            applyControlMode();
+            hideAllControls();
         }
+
         let selectedTimerDuration = 300;
         document.querySelectorAll('.timer-option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 document.querySelectorAll('.timer-option-btn').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 selectedTimerDuration = parseInt(this.dataset.time);
             });
         });
+
+        // ==================== START GAME ====================
         function startGame(mode) {
             currentMode = mode;
             let config = modeConfig[mode];
@@ -7195,11 +7578,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             coreExplosionActive = false;
             coreExplosionParticles = [];
             resetRefreshTimer();
+
             if (mode === 'friends') {
                 isFriendsMode = true;
                 p1 = { x: centerX() - 100, y: centerY(), score: 0, health: 100, angle: 0, shooting: false, blastCooldown: 0 };
                 p2 = { x: centerX() + 100, y: centerY(), score: 0, health: 100, angle: Math.PI, shooting: false, blastCooldown: 0 };
-                // HIDE player health bars in CO-OP mode (set display to none)
                 document.getElementById('p1Hud').style.display = 'none';
                 document.getElementById('p2Hud').style.display = 'none';
                 document.getElementById('coreHealthBox').style.bottom = '100px';
@@ -7207,13 +7590,8 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 updateFriendsUI();
                 document.body.classList.add('coop-mode-active');
                 document.getElementById('profileHomeBtn').style.display = 'none';
-                document.getElementById('mobileControls').style.display = 'none';
-                if(window.innerWidth <= 768) {
-                    if (coopMobileControlsDiv) coopMobileControlsDiv.style.display = 'flex';
-                    if (coopMobileHUD) coopMobileHUD.style.display = 'block';
-                } else {
-                    if (coopMobileControlsDiv) coopMobileControlsDiv.style.display = 'none';
-                    if (coopMobileHUD) coopMobileHUD.style.display = 'none';
+                if (window.innerWidth <= 768) {
+                    // Controls will be shown by updateControlsVisibility
                 }
             } else {
                 isFriendsMode = false;
@@ -7225,14 +7603,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 updateHealth();
                 document.body.classList.remove('coop-mode-active');
                 document.getElementById('profileHomeBtn').style.display = 'none';
-                if (coopMobileControlsDiv) coopMobileControlsDiv.style.display = 'none';
-                if (coopMobileHUD) coopMobileHUD.style.display = 'none';
-                if(window.innerWidth <= 768) {
-                    document.getElementById('mobileControls').style.display = 'flex';
-                } else {
-                    document.getElementById('mobileControls').style.display = 'none';
+                if (window.innerWidth <= 768) {
+                    // Controls will be shown by updateControlsVisibility
                 }
             }
+
             let modeDisplay = config.name;
             if (mode === 'level') {
                 modeDisplay = `LEVEL ${currentLevelNum}`;
@@ -7241,14 +7616,18 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             document.getElementById('modeIndicator').textContent = modeDisplay;
             document.getElementById('pauseBtn').style.display = 'block';
             document.getElementById('pointsDisplay').style.display = 'none';
+            const musicBtn = document.getElementById('musicControlBtn');
+            if (musicBtn) musicBtn.style.display = 'none';
             showScreen('startScreen');
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameOverScreen').style.display = 'none';
             initStars();
             initOrbitalRings();
             hideBannerAd();
+            applyControlMode();
             gameLoop();
         }
+
         function pauseGame() {
             if (!gameRunning) return;
             gamePaused = true;
@@ -7258,7 +7637,9 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             if (bgmGainNode && bgmIsPlaying) {
                 bgmGainNode.gain.linearRampToValueAtTime(bgmVolumeValue * 0.65, bgmAudioContext.currentTime + 0.5);
             }
+            hideAllControls();
         }
+
         function resumeGame() {
             gamePaused = false;
             const pauseDuration = Date.now() - timerPausedAt;
@@ -7270,12 +7651,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             gameLoop();
         }
+
         function gameOver() {
             gameRunning = false;
             document.getElementById('pauseBtn').style.display = 'none';
-            if (coopMobileControlsDiv) coopMobileControlsDiv.style.display = 'none';
-            if (coopMobileHUD) coopMobileHUD.style.display = 'none';
-            document.getElementById('mobileControls').style.display = 'none';
+            hideAllControls();
             document.getElementById('pointsDisplay').style.display = 'block';
             document.getElementById('timerDisplay').style.display = 'none';
             if (bgmGainNode && bgmIsPlaying) {
@@ -7325,6 +7705,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             } else {
                 document.getElementById('finalTime').style.display = 'none';
             }
+
             const existingReviveBtn = document.getElementById('reviveAdBtn');
             if (!existingReviveBtn) {
                 const reviveContainer = document.getElementById('gameOverScreen');
@@ -7342,6 +7723,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     restartBtn.parentNode.insertBefore(reviveBtn, restartBtn);
                 }
             }
+
             const existingDoubleBtn = document.getElementById('doubleRewardBtn');
             if (!existingDoubleBtn && currentMode !== 'level') {
                 const doubleContainer = document.getElementById('gameOverScreen');
@@ -7359,6 +7741,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                     restartBtn.parentNode.insertBefore(doubleBtn, restartBtn);
                 }
             }
+
             if (isFriendsMode) {
                 document.getElementById('friendsResults').style.display = 'block';
                 document.getElementById('p1FinalScore').textContent = p1.score;
@@ -7367,7 +7750,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 if (p1.score > p2.score) winnerText = 'PLAYER 1 WINS!';
                 else if (p2.score > p1.score) winnerText = 'PLAYER 2 WINS!';
                 else winnerText = 'TIE GAME!';
-                if (p1.health <= 0 && p2.health <= 0) {
+                if (p1.health <= 0 && p2.health <= 0 && health <= 0) {
                     winnerText = 'BOTH PLAYERS DOWN - GAME OVER';
                 } else if (health <= 0) {
                     winnerText = 'CORE DESTROYED - GAME OVER';
@@ -7376,12 +7759,17 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             } else {
                 document.getElementById('friendsResults').style.display = 'none';
             }
+
             showScreen('gameOverScreen');
+            const musicBtn = document.getElementById('musicControlBtn');
+            if (musicBtn) musicBtn.style.display = 'flex';
             setTimeout(() => {
                 showInterstitialAd();
             }, 500);
+            hideAllControls();
         }
-        // EVENT LISTENERS
+
+        // ==================== EVENT LISTENERS ====================
         document.getElementById('playBtn').addEventListener('click', showModeSelect);
         document.getElementById('backBtn').addEventListener('click', showHome);
         document.getElementById('friendsBtn').addEventListener('click', showFriendsSetup);
@@ -7411,6 +7799,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         document.getElementById('resetGameBtn').addEventListener('click', showResetConfirm);
         document.getElementById('resetConfirmYes').addEventListener('click', resetAllGameData);
         document.getElementById('resetConfirmNo').addEventListener('click', hideResetConfirm);
+
         document.querySelectorAll('.play-mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -7422,6 +7811,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             });
         });
+
         document.querySelectorAll('.all-mode-card').forEach(card => {
             card.addEventListener('click', () => {
                 const mode = card.dataset.mode;
@@ -7432,6 +7822,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 }
             });
         });
+
         document.getElementById('allModesBackBtn').addEventListener('click', showModeSelect);
         document.getElementById('startBtn').addEventListener('click', () => startGame(currentMode));
         document.getElementById('restartBtn').addEventListener('click', () => {
@@ -7450,14 +7841,16 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         document.getElementById('musicToggle').addEventListener('click', () => toggleSetting('musicEnabled'));
         document.getElementById('vibrationToggle').addEventListener('click', () => toggleSetting('vibrationEnabled'));
         document.getElementById('volumeSlider').addEventListener('input', (e) => setVolume(e.target.value));
+
         document.querySelectorAll('.store-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
+            tab.addEventListener('click', function () {
                 document.querySelectorAll('.store-tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.store-section').forEach(s => s.classList.remove('active'));
                 this.classList.add('active');
                 document.getElementById('tab-' + this.dataset.tab).classList.add('active');
             });
         });
+
         loadSettings();
         loadActiveEffects();
         if (isLoggedIn) {
@@ -7468,6 +7861,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
         saveGameData();
         updatePointsDisplay();
         document.body.classList.add('home-screen-active');
+
         setTimeout(() => {
             if (loadingScreen.style.display !== 'none') {
                 loadingScreen.style.display = 'none';
@@ -7478,24 +7872,27 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
             }
             resetRefreshTimer();
         }, 2000);
-        window.addEventListener('beforeunload', function() {
+
+        window.addEventListener('beforeunload', function () {
             if (isLoggedIn) {
                 saveProfile();
                 saveGameData();
                 saveLevelProgress();
             }
         });
-        setInterval(function() {
+
+        setInterval(function () {
             if (isLoggedIn && gameRunning === false) {
                 saveProfile();
                 saveGameData();
                 saveLevelProgress();
             }
         }, 30000);
+
         const originalLoginPlayer = loginPlayer;
-        window.loginPlayer = function(name) {
+        window.loginPlayer = function (name) {
             originalLoginPlayer(name);
-            setTimeout(function() {
+            setTimeout(function () {
                 loadPlayerData();
                 loadProfile();
                 loadLevelProgress();
@@ -7504,10 +7901,11 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 showToast("Profile data loaded successfully!", false);
             }, 100);
         };
+
         const originalLoginAsGuest = loginAsGuest;
-        window.loginAsGuest = function() {
+        window.loginAsGuest = function () {
             originalLoginAsGuest();
-            setTimeout(function() {
+            setTimeout(function () {
                 loadPlayerData();
                 loadProfile();
                 loadLevelProgress();
@@ -7515,6 +7913,7 @@ ${completed ? '✓' : (unlocked ? '▶' : '🔒')}
                 updatePointsDisplay();
             }, 100);
         };
+
         loginPlayer = window.loginPlayer;
         loginAsGuest = window.loginAsGuest;
     </script>
